@@ -1,6 +1,6 @@
-<h1 align="center">Events Portal</h1>
+<h1 align="center">DJ Events</h1>
 
-<h4 align='center'> Repository for the Unicode 2020-2021 DJ Events Portal project.</h4>
+<h4 align='center'> Repository for the Unicode 2020-2021 DJ Events project.</h4>
 
 ## File Structure
 
@@ -56,7 +56,7 @@
 
 ```bash
   # Clone the repository, create a virtual environment and install pre-commit hooks
-  git clone https://github.com/chouhanaryan/ep-test.git
+  git clone https://github.com/djunicode/dj-events.git
   cd ep-test
   python -m venv venv
   .\venv\Scripts\activate
@@ -78,7 +78,7 @@
 
 ```bash
   # Clone the repository, create a virtual environment and install pre-commit hooks
-  git clone https://github.com/chouhanaryan/ep-test.git
+  git clone https://github.com/djunicode/dj-events.git
   cd ep-test
   python -m venv venv
   .\venv\Scripts\activate
@@ -100,7 +100,7 @@
 
 ## Development Instructions
 
-We have configured a [pre-commit hook](https://githooks.com/) that runs [Black](https://black.readthedocs.io/en/stable/) and [Prettier](https://prettier.io/) and checks against [Flake8](https://flake8.pycqa.org/en/latest/) to ensure consistent code formatting and styling for Python and JavaScript files.
+We have configured a [pre-commit hook](https://githooks.com/) that runs [Black](https://black.readthedocs.io/en/stable/) and [Prettier](https://prettier.io/) and checks against [Flake8](https://flake8.pycqa.org/en/latest/) to ensure consistent code formatting and styling for Python and JavaScript files. Install the hook using `pre-commit install`.
 In case a check fails, run `git add .` and commit the files again.
 
 To manually run the hook, run `pre-commit run --all-files`.
