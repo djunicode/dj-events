@@ -57,10 +57,10 @@
 ```bash
   # Clone the repository, create a virtual environment and install pre-commit hooks
   git clone https://github.com/djunicode/dj-events.git
-  cd ep-test
+  cd dj-events
   python -m venv venv
   .\venv\Scripts\activate
-  pip3 install -r requirements.txt
+  pip install -r requirements.txt
   pre-commit install
 
   # Set up frontend
@@ -79,10 +79,10 @@
 ```bash
   # Clone the repository, create a virtual environment and install pre-commit hooks
   git clone https://github.com/djunicode/dj-events.git
-  cd ep-test
+  cd dj-events
   python -m venv venv
   .\venv\Scripts\activate
-  pip3 install -r requirements.txt
+  pip install -r requirements.txt
   pre-commit install
 
   # Start a local React server for development
