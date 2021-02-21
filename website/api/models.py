@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 
 DEPARTMENT_CHOICES = [
+    ("CSE", "Computer Science"),
     ("COMPS", "Computer"),
     ("IT", "Information Technology"),
     ("EXTC", "Electronics & Telecommunication"),
@@ -60,7 +61,6 @@ class CoCommittee(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     positionAssigned = models.CharField(max_length=200)
-    referralCount = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "CoCommittee"
@@ -94,6 +94,16 @@ class CommitteeToSubscribers(models.Model):
     def __str__(self):
         return self.committee
 
+class CoCommitteeTasks(models.Model):
+    coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
+    task = models.TextField()
+
+    class Meta:
+        verbose_name = "CoCommitteeTask"
+        verbose_name_plural = "CoCommitteeTasks"
+
+    def __str__(self):
+        return self.coCommittee+" "+self.id
 
 # ----------------------------------------------------------------------------------------
 
@@ -108,13 +118,19 @@ class Events(models.Model):
     eventSeatingCapacity = models.IntegerField()
     eventVenue = models.TextField()
     # eventBanner               = models.ImageField(upload_to = "")
+    # eventPoster               = models.ImageField(upload_to = "")
     registrationLink = models.URLField()
-    is_payable = models.BooleanField(default=False)
+    is_referal = models.BooleanField(default=False)
 
     # FK to link the organising committee...
     organisingCommittee = models.ForeignKey(
         Committee, on_delete=models.CASCADE
     )
+
+    contactName1=models.CharField(max_length=100,default='dummy user')
+    contactName2=models.CharField(max_length=100,blank=True,null=True)
+    contactNumber1=models.CharField(max_length=10,default='0000000000')
+    contactNumber2=models.CharField(max_length=10,blank=True,null=True)
 
     class Meta:
         verbose_name = "Event"
@@ -143,3 +159,17 @@ class EventImages(models.Model):
     class Meta:
         verbose_name = "EventImages"
         verbose_name_plural = "EventImages"
+
+# ----------------------------------------------------------------------------------------
+
+class CoCommitteeReferals(models.Model):
+    student = models.CharField(max_length=100,blank=True,null=True)
+    coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "CoCommitteeReferal"
+        verbose_name_plural = "CoCommitteeReferals"
+
+    def __str__(self):
+        return self.event+" "+self.student

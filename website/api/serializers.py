@@ -15,8 +15,12 @@ class EventsSerializer(serializers.ModelSerializer):
             "eventSeatingCapacity",
             "eventVenue",
             "registrationLink",
-            "registrationLink",
+            "is_referal",
             "organisingCommittee",
+            "contactName1",
+            "contactName2",
+            "contactNumber1",
+            "contactNumber2",
         ]
 
 
