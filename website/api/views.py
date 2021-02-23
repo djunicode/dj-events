@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from rest_framework import generics, status, mixins, permissions
 from rest_framework.response import Response
 from django.http import JsonResponse
@@ -100,3 +100,9 @@ class EventCrud(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+# Committee Page feed is provided by the following view.
+def EventFinder(request, pk):
+    return JsonResponse(EventsSerializer(Events.objects.filter(organisingCommittee=Committee.objects.get(id=pk)), many=True).data, status=status.HTTP_200_OK, safe=False)
+
