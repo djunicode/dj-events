@@ -15,7 +15,7 @@ from rest_framework.decorators import (
     permission_classes,
     authentication_classes,
 )
-from .serializers import EventsSerializer, CommitteeSerializer, CommitteeDetailSerializer, StudentsSerializer, ChangePasswordSerializer
+from .serializers import EventsSerializer, CommitteeSerializer, CommitteeDetailSerializer, StudentsSerializer
 from .models import Events, Committee, Students, CoCommitteeReferals, CoCommittee
 
 """
