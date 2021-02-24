@@ -26,5 +26,8 @@ urlpatterns = [
     path("events/new/", views.EventsCreate.as_view(), name="event_create"),
     path("events/<int:pk>/", views.EventDetail.as_view(), name="event_detail"),
     path("eventscrud/<int:pk>/", views.EventCrud.as_view(), name="event_crud"),
-    path("eventfinder/<int:pk>/", views.EventFinder, name="event_finder")
+    path("eventfinder/<int:pk>/", views.EventFinder, name="event_finder"),
+    path("committee_detail/<int:pk>/", views.CommitteeExtraDetail, name="committee_detail"),
+    path("student_profile/<int:pk>/", views.StudentProfile, name="student_profile"),
+    path("referral_table/<int:pk>/", views.ReferralTable, name="referral_table"),
 ]

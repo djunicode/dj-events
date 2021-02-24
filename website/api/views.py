@@ -15,8 +15,8 @@ from rest_framework.decorators import (
     permission_classes,
     authentication_classes,
 )
-from .serializers import EventsSerializer, CommitteeSerializer
-from .models import Events, Committee
+from .serializers import EventsSerializer, CommitteeSerializer, CommitteeDetailSerializer, StudentsSerializer, ChangePasswordSerializer
+from .models import Events, Committee, Students, CoCommitteeReferals, CoCommittee
 
 """
 Committees
@@ -104,5 +104,40 @@ class EventCrud(
 
 # Committee Page feed is provided by the following view.
 def EventFinder(request, pk):
-    return JsonResponse(EventsSerializer(Events.objects.filter(organisingCommittee=Committee.objects.get(id=pk)), many=True).data, status=status.HTTP_200_OK, safe=False)
+    return JsonResponse(
+        EventsSerializer(Events.objects.filter(organisingCommittee=Committee.objects.get(id=pk)), many=True).data, 
+        status=status.HTTP_200_OK, 
+        safe=False
+        )
 
+def CommitteeExtraDetail(request,pk):
+    return JsonResponse(
+        CommitteeDetailSerializer(Committee.objects.get(id=pk)).data, 
+        status=status.HTTP_200_OK, 
+        safe=False
+        )
+
+def StudentProfile(request,pk):
+    return JsonResponse(
+        StudentsSerializer(Students.objects.get(id=pk)).data, 
+        status=status.HTTP_200_OK, 
+        safe=False
+        )
+
+def ReferralTable(request,pk):
+    event = Events.objects.get(id=pk)
+    referrals = CoCommitteeReferals.objects.filter(event=event)
+    coCommittee = CoCommittee.objects.filter(committee=event.organisingCommittee)
+    data = []
+    for cocom in coCommittee:
+        d={
+            'SAP ID':cocom.student.sap,
+            'Name':cocom.student.first_name+" "+cocom.student.last_name,
+            'Referral Count':referrals.filter(coCommittee=cocom).count()
+        }
+        data.append(d)
+    return JsonResponse(
+        data, 
+        status=status.HTTP_200_OK, 
+        safe=False
+        )

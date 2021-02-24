@@ -28,6 +28,18 @@ class Committee(models.Model):
 
     def __str__(self):
         return self.committeeName
+    
+    @property
+    def events(self):
+        return self.events_set.all()
+
+    @property
+    def coreCommitteeMembers(self):
+        return self.corecommittee_set.all()
+
+    @property
+    def facultyMembers(self):
+        return self.faculty_set.all()
 
 
 # ----------------------------------------------------------------------------------------
@@ -36,6 +48,7 @@ class Students(AbstractUser):
     sap_regex = RegexValidator(
         regex=r"^\+?6?\d{10,12}$", message="SAP ID must be valid"
     )
+
     # profilePic               = models.ImageField(upload_to = "", blank=True)
     sap = models.CharField(
         validators=[sap_regex],
@@ -54,7 +67,15 @@ class Students(AbstractUser):
         verbose_name_plural = "Students"
 
     def __str__(self):
-        return self.sap
+        return self.username
+
+    @property
+    def coCommittees(self):
+        return self.cocommittee_set.all()
+    
+    @property
+    def coreCommittees(self):
+        return self.corecommittee_set.all()
 
 
 class CoCommittee(models.Model):
@@ -67,7 +88,15 @@ class CoCommittee(models.Model):
         verbose_name_plural = "CoCommittees"
 
     def __str__(self):
-        return self.student
+        return str(self.id)
+    
+    @property
+    def referrals(self):
+        return self.cocommitteereferals_set.all()
+
+    @property
+    def tasks(self):
+        return self.cocommitteetasks_set.all()
 
 
 class CoreCommittee(models.Model):
@@ -80,7 +109,7 @@ class CoreCommittee(models.Model):
         verbose_name_plural = "CoreCommittees"
 
     def __str__(self):
-        return self.student
+        return str(self.id)
 
 
 class CommitteeToSubscribers(models.Model):
@@ -103,7 +132,23 @@ class CoCommitteeTasks(models.Model):
         verbose_name_plural = "CoCommitteeTasks"
 
     def __str__(self):
-        return self.coCommittee+" "+self.id
+        return str(self.coCommittee)+" "+str(self.id)
+
+class Faculty(models.Model):
+    name= models.CharField(max_length=200)
+    # pic= models.ImageField(upload_to="")
+    positionAssigned = models.CharField(max_length=200)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
+    department = models.CharField(
+        max_length=5, blank=False, choices=DEPARTMENT_CHOICES
+    )
+
+    class Meta:
+        verbose_name = "Faculty"
+        verbose_name_plural = "Faculties"
+
+    def __str__(self):
+        return self.name
 
 # ----------------------------------------------------------------------------------------
 
@@ -120,7 +165,7 @@ class Events(models.Model):
     # eventBanner               = models.ImageField(upload_to = "")
     # eventPoster               = models.ImageField(upload_to = "")
     registrationLink = models.URLField()
-    is_referal = models.BooleanField(default=False)
+    is_referral = models.BooleanField(default=False)
 
     # FK to link the organising committee...
     organisingCommittee = models.ForeignKey(
@@ -172,4 +217,6 @@ class CoCommitteeReferals(models.Model):
         verbose_name_plural = "CoCommitteeReferals"
 
     def __str__(self):
-        return self.event+" "+self.student
+        return str(self.id)
+    
+
