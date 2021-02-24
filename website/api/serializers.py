@@ -21,6 +21,7 @@ class EventsSerializer(serializers.ModelSerializer):
             "contactName2",
             "contactNumber1",
             "contactNumber2",
+            "likes"
         ]
 
 

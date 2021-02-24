@@ -184,6 +184,10 @@ class Events(models.Model):
     def __str__(self):
         return self.eventName
 
+    @property
+    def likes(self):
+        return self.eventlikes_set.all().count()
+
 
 class EventLikes(models.Model):
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
@@ -194,7 +198,7 @@ class EventLikes(models.Model):
         verbose_name_plural = "EventLikes"
 
     def __str__(self):
-        return self.event
+        return str(self.id)
 
 
 class EventImages(models.Model):

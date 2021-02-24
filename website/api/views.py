@@ -111,33 +111,53 @@ def EventFinder(request, pk):
         )
 
 def CommitteeExtraDetail(request,pk):
-    return JsonResponse(
-        CommitteeDetailSerializer(Committee.objects.get(id=pk)).data, 
-        status=status.HTTP_200_OK, 
-        safe=False
-        )
+    try:
+        committee = Committee.objects.get(id=pk)
+        return JsonResponse(
+            CommitteeDetailSerializer(committee).data, 
+            status=status.HTTP_200_OK, 
+            safe=False
+            )
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            {'message':'The committee does not exist'},
+            status=status.HTTP_204_NO_CONTENT,
+            )
 
 def StudentProfile(request,pk):
-    return JsonResponse(
-        StudentsSerializer(Students.objects.get(id=pk)).data, 
-        status=status.HTTP_200_OK, 
-        safe=False
-        )
+    try:
+        student = Students.objects.get(id=pk)
+        return JsonResponse(
+            StudentsSerializer(student).data, 
+            status=status.HTTP_200_OK, 
+            safe=False
+            )
+    except Students.DoesNotExist:
+        return JsonResponse(
+            {'message':'The student does not exist'},
+            status=status.HTTP_204_NO_CONTENT,
+            )
 
 def ReferralTable(request,pk):
-    event = Events.objects.get(id=pk)
-    referrals = CoCommitteeReferals.objects.filter(event=event)
-    coCommittee = CoCommittee.objects.filter(committee=event.organisingCommittee)
-    data = []
-    for cocom in coCommittee:
-        d={
-            'SAP ID':cocom.student.sap,
-            'Name':cocom.student.first_name+" "+cocom.student.last_name,
-            'Referral Count':referrals.filter(coCommittee=cocom).count()
-        }
-        data.append(d)
-    return JsonResponse(
-        data, 
-        status=status.HTTP_200_OK, 
-        safe=False
-        )
+    try:
+        event = Events.objects.get(id=pk)
+        referrals = CoCommitteeReferals.objects.filter(event=event)
+        coCommittee = CoCommittee.objects.filter(committee=event.organisingCommittee)
+        data = []
+        for cocom in coCommittee:
+            d={
+                'SAP ID':cocom.student.sap,
+                'Name':cocom.student.first_name+" "+cocom.student.last_name,
+                'Referral Count':referrals.filter(coCommittee=cocom).count()
+            }
+            data.append(d)
+        return JsonResponse(
+            data, 
+            status=status.HTTP_200_OK, 
+            safe=False
+            )
+    except Events.DoesNotExist:
+        return JsonResponse(
+            {'message':'The event does not exist'},
+            status=status.HTTP_204_NO_CONTENT,
+            )
