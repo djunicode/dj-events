@@ -1,6 +1,17 @@
 from rest_framework import serializers
-from .models import Events, CoreCommittee, CoCommitteeReferals,CoCommitteeTasks ,CoCommittee, Faculty ,Committee, Students
+from .models import (
+    Events,
+    CoreCommittee,
+    CoCommitteeReferals,
+    CoCommitteeTasks,
+    CoCommittee,
+    Faculty,
+    Committee,
+    Students,
+    EventLikes,
+)
 from django.contrib.auth.password_validation import validate_password
+
 
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,19 +32,20 @@ class EventsSerializer(serializers.ModelSerializer):
             "contactName2",
             "contactNumber1",
             "contactNumber2",
-            "likes"
+            "likes",
         ]
 
 
 class CoreCommitteeSerializer(serializers.ModelSerializer):
     class Meta:
-        model= CoreCommittee
+        model = CoreCommittee
         fields = [
             "id",
             "student",
             "committee",
             "positionAssigned",
         ]
+
 
 class CoCommitteeReferalsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,6 +57,7 @@ class CoCommitteeReferalsSerializer(serializers.ModelSerializer):
             "event",
         ]
 
+
 class CoCommitteeTasksSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoCommitteeTasks
@@ -52,14 +65,17 @@ class CoCommitteeTasksSerializer(serializers.ModelSerializer):
             "id",
             "coCommittee",
             "task",
+            "assigned_by",
         ]
+        depth = 2
+
 
 class CoCommitteeSerializer(serializers.ModelSerializer):
     referrals = CoCommitteeReferalsSerializer(many=True)
     tasks = CoCommitteeTasksSerializer(many=True)
 
     class Meta:
-        model= CoCommittee
+        model = CoCommittee
         fields = [
             "id",
             "student",
@@ -68,6 +84,7 @@ class CoCommitteeSerializer(serializers.ModelSerializer):
             "referrals",
             "tasks",
         ]
+
 
 class FacultySerializer(serializers.ModelSerializer):
     class Meta:
@@ -80,6 +97,7 @@ class FacultySerializer(serializers.ModelSerializer):
             "department",
         ]
 
+
 class CommitteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Committee
@@ -90,6 +108,7 @@ class CommitteeSerializer(serializers.ModelSerializer):
             "committeeDept",
             "committeeChairperson",
         ]
+
 
 class CommitteeDetailSerializer(serializers.ModelSerializer):
     events = EventsSerializer(many=True)
@@ -108,7 +127,8 @@ class CommitteeDetailSerializer(serializers.ModelSerializer):
             "coreCommitteeMembers",
             "facultyMembers",
         ]
-        depth=2
+        depth = 2
+
 
 class StudentsSerializer(serializers.ModelSerializer):
     coCommittees = CoCommitteeSerializer(many=True)
@@ -124,5 +144,14 @@ class StudentsSerializer(serializers.ModelSerializer):
             "sap",
             "department",
             "coCommittees",
-            "coreCommittees"
+            "coreCommittees",
         ]
+
+
+class EventLikeSerializer(serializers.ModelSerializer):
+    event = EventsSerializer(many=True)
+    student = StudentsSerializer(many=True)
+
+    class Meta:
+        model = EventLikes
+        fields = ["id", "event", "student"]

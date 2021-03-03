@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "api",
+    "rest_framework.authtoken",
     "core",
 ]
 
@@ -147,3 +148,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "client/build",
     BASE_DIR / "client/build/static",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ],
+}

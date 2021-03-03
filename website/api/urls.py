@@ -27,7 +27,40 @@ urlpatterns = [
     path("events/<int:pk>/", views.EventDetail.as_view(), name="event_detail"),
     path("eventscrud/<int:pk>/", views.EventCrud.as_view(), name="event_crud"),
     path("eventfinder/<int:pk>/", views.EventFinder, name="event_finder"),
-    path("committee_detail/<int:pk>/", views.CommitteeExtraDetail, name="committee_detail"),
-    path("student_profile/<int:pk>/", views.StudentProfile, name="student_profile"),
-    path("referral_table/<int:pk>/", views.ReferralTable, name="referral_table"),
+    path(
+        "committee_detail/<int:pk>/",
+        views.CommitteeExtraDetail,
+        name="committee_detail",
+    ),
+    path(
+        "student_profile/<int:pk>/",
+        views.StudentProfile,
+        name="student_profile",
+    ),
+    path(
+        "referral_table/<int:pk>/", views.ReferralTable, name="referral_table"
+    ),
+    path(
+        "event_like/<eventName>/<username>/",
+        views.event_like,
+        name="event_like",
+    ),
+    path(
+        "event_delete/<eventName>/<username>/",
+        views.event_delete,
+        name="event_delete",
+    ),
+    # tasks
+    path("coretasklist/<core>/", views.core_task_list, name="core_task_list"),
+    path(
+        "coretaskcreate/<core>/",
+        views.core_task_create,
+        name="core_task_create",
+    ),
+    path(
+        "core_task_crud/<int:pk>/", views.core_task_crud, name="core_task_crud"
+    ),
+    path("cotasklist/<co>/", views.co_task_list, name="co_task_list"),
+    # login
+    path("student_login/", views.student_login, name="student_login"),
 ]

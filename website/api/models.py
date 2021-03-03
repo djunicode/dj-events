@@ -28,7 +28,7 @@ class Committee(models.Model):
 
     def __str__(self):
         return self.committeeName
-    
+
     @property
     def events(self):
         return self.events_set.all()
@@ -53,9 +53,6 @@ class Students(AbstractUser):
     sap = models.CharField(
         validators=[sap_regex],
         max_length=12,
-        blank=False,
-        null=False,
-        default=None,
         unique=True,
     )
     department = models.CharField(
@@ -72,7 +69,7 @@ class Students(AbstractUser):
     @property
     def coCommittees(self):
         return self.cocommittee_set.all()
-    
+
     @property
     def coreCommittees(self):
         return self.corecommittee_set.all()
@@ -89,7 +86,7 @@ class CoCommittee(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
+
     @property
     def referrals(self):
         return self.cocommitteereferals_set.all()
@@ -123,19 +120,22 @@ class CommitteeToSubscribers(models.Model):
     def __str__(self):
         return self.committee
 
+
 class CoCommitteeTasks(models.Model):
     coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
     task = models.TextField()
+    assigned_by = models.ForeignKey(CoreCommittee, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "CoCommitteeTask"
         verbose_name_plural = "CoCommitteeTasks"
 
     def __str__(self):
-        return str(self.coCommittee)+" "+str(self.id)
+        return str(self.coCommittee) + " " + str(self.id)
+
 
 class Faculty(models.Model):
-    name= models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     # pic= models.ImageField(upload_to="")
     positionAssigned = models.CharField(max_length=200)
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
@@ -149,6 +149,7 @@ class Faculty(models.Model):
 
     def __str__(self):
         return self.name
+
 
 # ----------------------------------------------------------------------------------------
 
@@ -172,10 +173,10 @@ class Events(models.Model):
         Committee, on_delete=models.CASCADE
     )
 
-    contactName1=models.CharField(max_length=100,default='dummy user')
-    contactName2=models.CharField(max_length=100,blank=True,null=True)
-    contactNumber1=models.CharField(max_length=10,default='0000000000')
-    contactNumber2=models.CharField(max_length=10,blank=True,null=True)
+    contactName1 = models.CharField(max_length=100, default="dummy user")
+    contactName2 = models.CharField(max_length=100, blank=True, null=True)
+    contactNumber1 = models.CharField(max_length=10, default="0000000000")
+    contactNumber2 = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
         verbose_name = "Event"
@@ -209,10 +210,12 @@ class EventImages(models.Model):
         verbose_name = "EventImages"
         verbose_name_plural = "EventImages"
 
+
 # ----------------------------------------------------------------------------------------
 
+
 class CoCommitteeReferals(models.Model):
-    student = models.CharField(max_length=100,blank=True,null=True)
+    student = models.CharField(max_length=100, blank=True, null=True)
     coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
 
@@ -222,5 +225,3 @@ class CoCommitteeReferals(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
-
