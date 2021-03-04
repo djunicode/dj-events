@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import (
     Students,
     Committee,
@@ -12,29 +13,89 @@ from .models import (
     CoCommitteeTasks,
 )
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
+# For Student Admin
+class StudentCreationForm(forms.ModelForm):
+    class Meta:
+        model = Students
+        fields = ("sap",)
 
-class StudentAdmin(UserAdmin):
-    model = Students
-    list_display = ["username", "sap", "department", "email"]
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {"fields": ("sap", "department")}),
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(StudentCreationForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+class CustomStudentAdmin(UserAdmin):
+    add_form = StudentCreationForm
+    list_display = ("username","email", "sap", "department", "first_name", "last_name")
+    ordering = ("sap",)
+
+    fieldsets = ((None, {"fields": ("username","email", "password", "first_name", "last_name")}),)
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "password",
+                    "first_name",
+                    "last_name",
+                    "sap",
+                    "department",
+                    "is_active",
+                ),
+            },
+        ),
     )
 
+    filter_horizontal = ()
 
-class CommitteeAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ("Name", {"fields": ["committeeName"]}),
-        ("Description", {"fields": ["committeeDescription"]}),
-        ("Department", {"fields": ["committeeDept"]}),
-        ("Chairperson", {"fields": ["committeeChairperson"]}),
-    ]
-    list_display = (
-        "id",
-        "committeeName",
-        "committeeDept",
-        "committeeChairperson",
+# For Committee Admin
+class CommitteeCreationForm(forms.ModelForm):
+    class Meta:
+        model = Committee
+        fields = ("email",)
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(StudentCreationForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+class CustomCommitteeAdmin(UserAdmin):
+    add_form = StudentCreationForm
+    list_display = ("committeeName", "email", "committeeDept", "username")
+    ordering = ("committeeName",)
+
+    fieldsets = ((None, {"fields": ("username","email", "password")}),)
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "password",
+                    "committeeName",
+                    "committeeDescription",
+                    "committeeDept",
+                    "committeeChairperson",
+                    "is_active",
+                ),
+            },
+        ),
     )
+
+    filter_horizontal = ()
 
 
 class CoCommitteeAdmin(admin.ModelAdmin):
@@ -98,7 +159,6 @@ class EventsAdmin(admin.ModelAdmin):
         "is_referral",
     )
 
-
 class EventLikesAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Event", {"fields": ["event"]}),
@@ -110,15 +170,52 @@ class EventLikesAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Students, StudentAdmin)
-admin.site.register(Committee, CommitteeAdmin)
+class FacultyAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ("Name", {"fields": ["name"]}),
+        ("Position", {"fields": ["positionAssigned"]}),
+        ("Committee", {"fields": ["committee"]}),
+        ("Department", {"fields": ["department"]}),
+    ]
+    list_display = (
+        "name",
+        "positionAssigned",
+        "committee",
+        "department",
+    )
+
+class CoCommitteeReferalsAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ("Student", {"fields": ["participant"]}),
+        ("CoCommittee", {"fields": ["coCommittee"]}),
+        ("Event", {"fields": ["event"]}),
+    ]
+    list_display = (
+        "participant",
+        "coCommittee",
+        "event",
+    )
+
+class CoCommitteeTasksAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ("CoCommittee", {"fields": ["coCommittee"]}),
+        ("Task", {"fields": ["task"]}),
+        ("AssignedBy", {"fields": ["assigned_by"]}),
+    ]
+    list_display = (
+        "coCommittee",
+        "task",
+        "assigned_by",
+    )
+
+admin.site.register(Students, CustomStudentAdmin)
+admin.site.register(Committee, CustomCommitteeAdmin)
 admin.site.register(CoCommittee, CoCommitteeAdmin)
 admin.site.register(CoreCommittee, CoreCommitteeAdmin)
 admin.site.register(CommitteeToSubscribers, CommitteeToSubscribersAdmin)
 admin.site.register(Events, EventsAdmin)
 admin.site.register(EventLikes, EventLikesAdmin)
-
-admin.site.register(Faculty)
-admin.site.register(CoCommitteeReferals)
-admin.site.register(CoCommitteeTasks)
+admin.site.register(Faculty, FacultyAdmin)
+admin.site.register(CoCommitteeReferals, CoCommitteeReferalsAdmin)
+admin.site.register(CoCommitteeTasks, CoCommitteeTasksAdmin)
 

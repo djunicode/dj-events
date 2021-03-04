@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 DEPARTMENT_CHOICES = [
@@ -14,12 +14,14 @@ DEPARTMENT_CHOICES = [
 ]
 
 
-class Committee(models.Model):
-    # These are the attributes for the committee account...
+class Committee(User):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,parent_link=True)
     committeeName = models.CharField(max_length=100)
     # committeePhoto           = models.ImageField(upload_to = "")
     committeeDescription = models.TextField()
-    committeeDept = models.CharField(max_length=100)
+    committeeDept = models.CharField(
+        max_length=5, blank=False, choices=DEPARTMENT_CHOICES
+    )
     committeeChairperson = models.CharField(max_length=200)
 
     class Meta:
@@ -27,7 +29,7 @@ class Committee(models.Model):
         verbose_name_plural = "Committees"
 
     def __str__(self):
-        return self.committeeName
+        return str(self.committeeName)
 
     @property
     def events(self):
@@ -44,11 +46,11 @@ class Committee(models.Model):
 
 # ----------------------------------------------------------------------------------------
 # User Models
-class Students(AbstractUser):
+class Students(User):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,parent_link=True)
     sap_regex = RegexValidator(
         regex=r"^\+?6?\d{10,12}$", message="SAP ID must be valid"
     )
-
     # profilePic               = models.ImageField(upload_to = "", blank=True)
     sap = models.CharField(
         validators=[sap_regex],
@@ -64,7 +66,7 @@ class Students(AbstractUser):
         verbose_name_plural = "Students"
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
     @property
     def coCommittees(self):
@@ -85,7 +87,7 @@ class CoCommittee(models.Model):
         verbose_name_plural = "CoCommittees"
 
     def __str__(self):
-        return str(self.id)
+        return str(self.committee)+" "+str(self.positionAssigned)+" "+str(self.student)
 
     @property
     def referrals(self):
@@ -106,7 +108,7 @@ class CoreCommittee(models.Model):
         verbose_name_plural = "CoreCommittees"
 
     def __str__(self):
-        return str(self.id)
+        return str(self.committee)+" "+str(self.positionAssigned)+" "+str(self.student)
 
 
 class CommitteeToSubscribers(models.Model):
@@ -118,7 +120,7 @@ class CommitteeToSubscribers(models.Model):
         verbose_name_plural = "CommitteeToSubscribers"
 
     def __str__(self):
-        return self.committee
+        return str(self.subscribers)+" "+str(self.committee)
 
 
 class CoCommitteeTasks(models.Model):
@@ -131,7 +133,7 @@ class CoCommitteeTasks(models.Model):
         verbose_name_plural = "CoCommitteeTasks"
 
     def __str__(self):
-        return str(self.coCommittee) + " " + str(self.id)
+        return str(self.coCommittee)+" "+str(self.assigned_by)+" "+str(self.id)
 
 
 class Faculty(models.Model):
@@ -148,7 +150,7 @@ class Faculty(models.Model):
         verbose_name_plural = "Faculties"
 
     def __str__(self):
-        return self.name
+        return str(self.name)+" "+str(self.committee)
 
 
 # ----------------------------------------------------------------------------------------
@@ -160,7 +162,7 @@ class Events(models.Model):
     eventSummary = models.CharField(max_length=500)
     eventName = models.CharField(max_length=100)
     eventDate = models.DateField()
-    eventTime = models.CharField(max_length=15)
+    eventTime = models.TimeField()
     eventSeatingCapacity = models.IntegerField()
     eventVenue = models.TextField()
     # eventBanner               = models.ImageField(upload_to = "")
@@ -183,7 +185,7 @@ class Events(models.Model):
         verbose_name_plural = "Events"
 
     def __str__(self):
-        return self.eventName
+        return str(self.eventName)+" "+str(self.eventDate.year)
 
     @property
     def likes(self):
@@ -199,7 +201,7 @@ class EventLikes(models.Model):
         verbose_name_plural = "EventLikes"
 
     def __str__(self):
-        return str(self.id)
+        return str(self.student)+" "+str(self.event)
 
 
 class EventImages(models.Model):
@@ -215,7 +217,7 @@ class EventImages(models.Model):
 
 
 class CoCommitteeReferals(models.Model):
-    student = models.CharField(max_length=100, blank=True, null=True)
+    participant = models.CharField(max_length=100, blank=True, null=True)
     coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
 
@@ -224,4 +226,4 @@ class CoCommitteeReferals(models.Model):
         verbose_name_plural = "CoCommitteeReferals"
 
     def __str__(self):
-        return str(self.id)
+        return str(self.event)+" "+str(self.coCommittee)+" "+str(self.participant)
