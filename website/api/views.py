@@ -194,7 +194,7 @@ def student_login(request):
             username = request.data.get("username")
             password = request.data.get("password")
             user = authenticate(request, username=username, password=password)
-
+            student = Students.objects.get(user=user)
             if user is not None:
                 token, _ = Token.objects.get_or_create(user=user)
 
@@ -203,7 +203,7 @@ def student_login(request):
                     "id": user.pk,
                     "Name": user.first_name + " " + user.last_name,
                     "Username": user.username,
-                    "SapID": user.sap,
+                    "SapID": student.sap,
                     "Token": token.key,
                 }
                 return JsonResponse(data, status=status.HTTP_200_OK)
@@ -223,11 +223,45 @@ def student_login(request):
 
 
 @api_view(["POST"])
-def event_like(request, eventName, username):
+def committee_login(request):
     if request.method == "POST":
         try:
-            student = Students.objects.get(username=username)
-            event = Events.objects.get(eventName=eventName)
+            username = request.data.get("username")
+            password = request.data.get("password")
+            user = authenticate(request, username=username, password=password)
+            committee = Committee.objects.get(user=user)
+            if user is not None:
+                token, _ = Token.objects.get_or_create(user=user)
+
+                # login(request, user)
+                data = {
+                    "id": user.pk,
+                    "Committee Name": committee.committeeName,
+                    "Committee Department": committee.committeeDept,
+                    "Token": token.key,
+                }
+                return JsonResponse(data, status=status.HTTP_200_OK)
+            else:
+                data = {"Message": "There was error authenticating"}
+                return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return JsonResponse(
+                data={"Message": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+    else:
+        return JsonResponse(
+            data={"Message": "Only POST request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@api_view(["POST"])
+def event_like(request, pk1, pk2):
+    if request.method == "POST":
+        try:
+            student = Students.objects.get(user__id=pk2)
+            event = Events.objects.get(id=pk1)
             liked = EventLikes.objects.filter(student=student, event=event)
             if liked:
                 return Response({"message": "Event Already Liked"})
@@ -250,11 +284,11 @@ def event_like(request, eventName, username):
 
 
 @api_view(["DELETE"])
-def event_delete(request, eventName, username):
+def event_dislike(request, pk1, pk2):
     if request.method == "DELETE":
         try:
             eventlike = EventLikes.objects.filter(
-                event__eventName=eventName, student__username=username
+                event__id=pk1, student__user__id=pk2
             )
             if eventlike:
                 eventlike.delete()
@@ -279,31 +313,50 @@ def event_delete(request, eventName, username):
 
 
 @api_view(["GET"])
-def core_task_list(request, core):
+def core_task_list(request, pk):
     if request.method == "GET":
         try:
             tasks = CoCommitteeTasks.objects.filter(
-                assigned_by__student__username=core
-            )
+                assigned_by__student__user__id=pk
+            ).order_by("coCommittee__committee")
             serializer = CoCommitteeTasksSerializer(tasks, many=True)
-            x = serializer.data[0]["coCommittee"]["student"]
-            y = serializer.data[0]["assigned_by"]["student"]
-            x.pop("password")
-            x.pop("last_login")
-            x.pop("is_staff")
-            x.pop("is_superuser")
-            x.pop("is_active")
-            x.pop("date_joined")
-            x.pop("groups")
-            x.pop("user_permissions")
-            y.pop("password")
-            y.pop("last_login")
-            y.pop("is_staff")
-            y.pop("is_superuser")
-            y.pop("is_active")
-            y.pop("date_joined")
-            y.pop("groups")
-            y.pop("user_permissions")
+            for i in range(len(serializer.data)):
+                x1 = serializer.data[i]["coCommittee"]["student"]
+                x2 = serializer.data[i]["coCommittee"]["committee"]
+                y1 = serializer.data[i]["assigned_by"]["student"]
+                y2 = serializer.data[i]["assigned_by"]["committee"]
+                x1.pop("password")
+                x1.pop("last_login")
+                x1.pop("is_staff")
+                x1.pop("is_superuser")
+                x1.pop("is_active")
+                x1.pop("date_joined")
+                x1.pop("groups")
+                x1.pop("user_permissions")
+                y1.pop("password")
+                y1.pop("last_login")
+                y1.pop("is_staff")
+                y1.pop("is_superuser")
+                y1.pop("is_active")
+                y1.pop("date_joined")
+                y1.pop("groups")
+                y1.pop("user_permissions")
+                x2.pop("password")
+                x2.pop("last_login")
+                x2.pop("is_staff")
+                x2.pop("is_superuser")
+                x2.pop("is_active")
+                x2.pop("date_joined")
+                x2.pop("groups")
+                x2.pop("user_permissions")
+                y2.pop("password")
+                y2.pop("last_login")
+                y2.pop("is_staff")
+                y2.pop("is_superuser")
+                y2.pop("is_active")
+                y2.pop("date_joined")
+                y2.pop("groups")
+                y2.pop("user_permissions")
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception:
             return JsonResponse(
@@ -318,7 +371,7 @@ def core_task_list(request, core):
 
 
 @api_view(["POST"])
-def core_task_create(request, core):
+def core_task_create(request, pk):
     if request.method == "POST":
         try:
             coCommittee = request.data.get("coCommittee")
@@ -327,9 +380,9 @@ def core_task_create(request, core):
                 student__username=coCommittee
             ).values("committee")
             core_val = CoreCommittee.objects.filter(
-                student__username=core
+                student__user__id=pk
             ).values("committee")
-            core_pk = CoreCommittee.objects.get(student__username=core)
+            core_pk = CoreCommittee.objects.get(student__user__id=pk)
             co_pk = CoCommittee.objects.get(student__username=coCommittee)
             for x in co:
                 co_committee = x["committee"]
@@ -362,51 +415,83 @@ def core_task_create(request, core):
         )
 
 
-@api_view(["PUT", "DELETE"])
-def core_task_crud(request, pk):
+@api_view(["DELETE"])
+def core_task_crud(request, pk1, pk2):
     try:
-        tasks = CoCommitteeTasks.objects.get(pk=pk)
+        tasks = CoCommitteeTasks.objects.get(pk=pk1)
+        assigned_by = CoreCommittee.objects.get(student__user__id=pk2)
     except Exception:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
+    """
     if request.method == "PUT":
         serializer = CoCommitteeTasksSerializer(tasks, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == "DELETE":
-        tasks.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    """
+    if request.method == "DELETE":
+        if assigned_by:
+            if tasks.assigned_by == assigned_by:
+                tasks.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response(
+                    {"message": "You do have the required permission"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return Response(
+                {"message": "You do have the required permission"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 @api_view(["GET"])
-def co_task_list(request, co):
+def co_task_list(request, pk1, pk2):
     if request.method == "GET":
         try:
             tasks = CoCommitteeTasks.objects.filter(
-                coCommittee__student__username=co
+                coCommittee__student__user__id=pk1
             )
             serializer = CoCommitteeTasksSerializer(tasks, many=True)
-            x = serializer.data[0]["coCommittee"]["student"]
-            y = serializer.data[0]["assigned_by"]["student"]
-            x.pop("password")
-            x.pop("last_login")
-            x.pop("is_staff")
-            x.pop("is_superuser")
-            x.pop("is_active")
-            x.pop("date_joined")
-            x.pop("groups")
-            x.pop("user_permissions")
-            y.pop("password")
-            y.pop("last_login")
-            y.pop("is_staff")
-            y.pop("is_superuser")
-            y.pop("is_active")
-            y.pop("date_joined")
-            y.pop("groups")
-            y.pop("user_permissions")
+            for i in range(len(serializer.data)):
+                x1 = serializer.data[i]["coCommittee"]["student"]
+                x2 = serializer.data[i]["coCommittee"]["committee"]
+                y1 = serializer.data[i]["assigned_by"]["student"]
+                y2 = serializer.data[i]["assigned_by"]["committee"]
+                x1.pop("password")
+                x1.pop("last_login")
+                x1.pop("is_staff")
+                x1.pop("is_superuser")
+                x1.pop("is_active")
+                x1.pop("date_joined")
+                x1.pop("groups")
+                x1.pop("user_permissions")
+                y1.pop("password")
+                y1.pop("last_login")
+                y1.pop("is_staff")
+                y1.pop("is_superuser")
+                y1.pop("is_active")
+                y1.pop("date_joined")
+                y1.pop("groups")
+                y1.pop("user_permissions")
+                x2.pop("password")
+                x2.pop("last_login")
+                x2.pop("is_staff")
+                x2.pop("is_superuser")
+                x2.pop("is_active")
+                x2.pop("date_joined")
+                x2.pop("groups")
+                x2.pop("user_permissions")
+                y2.pop("password")
+                y2.pop("last_login")
+                y2.pop("is_staff")
+                y2.pop("is_superuser")
+                y2.pop("is_active")
+                y2.pop("date_joined")
+                y2.pop("groups")
+                y2.pop("user_permissions")
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception:
             return JsonResponse(

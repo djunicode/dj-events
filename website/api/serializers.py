@@ -56,7 +56,7 @@ class CoCommitteeReferalsSerializer(serializers.ModelSerializer):
         model = CoCommitteeReferals
         fields = [
             "id",
-            "student",
+            "participant",
             "coCommittee",
             "event",
         ]

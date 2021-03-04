@@ -40,27 +40,33 @@ urlpatterns = [
     path(
         "referral_table/<int:pk>/", views.ReferralTable, name="referral_table"
     ),
+    # event like dislike
     path(
-        "event_like/<eventName>/<username>/",
+        "event_like/<int:pk1>/<int:pk2>/",
         views.event_like,
         name="event_like",
     ),
     path(
-        "event_delete/<eventName>/<username>/",
-        views.event_delete,
-        name="event_delete",
+        "event_dislike/<int:pk1>/<int:pk2>/",
+        views.event_dislike,
+        name="event_dislike",
     ),
     # tasks
-    path("coretasklist/<core>/", views.core_task_list, name="core_task_list"),
     path(
-        "coretaskcreate/<core>/",
+        "coretasklist/<int:pk>/", views.core_task_list, name="core_task_list"
+    ),
+    path(
+        "coretaskcreate/<int:pk>/",
         views.core_task_create,
         name="core_task_create",
     ),
     path(
-        "core_task_crud/<int:pk>/", views.core_task_crud, name="core_task_crud"
+        "core_task_crud/<int:pk1>/<int:pk2>/",
+        views.core_task_crud,
+        name="core_task_crud",
     ),
-    path("cotasklist/<co>/", views.co_task_list, name="co_task_list"),
+    path("cotasklist/<int:pk>/", views.co_task_list, name="co_task_list"),
     # login
     path("student_login/", views.student_login, name="student_login"),
+    path("committee_login/", views.committee_login, name="committee_login"),
 ]
