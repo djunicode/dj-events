@@ -71,5 +71,6 @@ urlpatterns = [
     path("committee_login/", views.committee_login, name="committee_login"),
 
     # Registration
-    path("student_registration/", views.student_registration, name="student_registration")
+    path("student_registration/", views.student_registration, name="student_registration"),
+    path('change_password/', views.ChangePasswordView.as_view(), name='change_password'),
 ]
