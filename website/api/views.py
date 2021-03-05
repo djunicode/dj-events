@@ -37,7 +37,9 @@ from .models import (
     CoreCommittee,
 )
 from .permissions import (
-    IsCommitteeExtraDetail,
+    ForEventsCreate,
+    ForReferralTable,
+    ForEventLikeDislike,
 )
 
 """
@@ -60,15 +62,6 @@ class CommitteeDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
-
-class CommitteeCreate(mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = Committee.objects.all()
-    serializer_class = CommitteeSerializer
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
 
 class CommitteeCrud(
     mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView
@@ -106,6 +99,7 @@ class EventDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class EventsCreate(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Events.objects.all()
     serializer_class = EventsSerializer
+    permission_classes = (IsAuthenticated,ForEventsCreate,)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -116,6 +110,7 @@ class EventCrud(
 ):
     queryset = Events.objects.all()
     serializer_class = EventsSerializer
+    # permission_classes = (IsAuthenticated,IsParticularCommittee, )
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -125,6 +120,8 @@ class EventCrud(
 
 
 # Committee Page feed is provided by the following view.
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def EventFinder(request, pk):
     return JsonResponse(
         EventsSerializer(
@@ -138,7 +135,7 @@ def EventFinder(request, pk):
     )
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated,IsCommitteeExtraDetail])
+@permission_classes([IsAuthenticated])
 def CommitteeExtraDetail(request, pk):
     try:
         committee = Committee.objects.get(id=pk)
@@ -153,7 +150,8 @@ def CommitteeExtraDetail(request, pk):
             status=status.HTTP_204_NO_CONTENT,
         )
 
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def StudentProfile(request, pk):
     try:
         student = Students.objects.get(id=pk)
@@ -168,7 +166,8 @@ def StudentProfile(request, pk):
             status=status.HTTP_204_NO_CONTENT,
         )
 
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated,ForReferralTable])
 def ReferralTable(request, pk):
     try:
         event = Events.objects.get(id=pk)
@@ -265,6 +264,7 @@ def committee_login(request):
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated,ForEventLikeDislike])
 def event_like(request, pk1, pk2):
     if request.method == "POST":
         try:
@@ -292,6 +292,7 @@ def event_like(request, pk1, pk2):
 
 
 @api_view(["DELETE"])
+@permission_classes([IsAuthenticated,ForEventLikeDislike])
 def event_dislike(request, pk1, pk2):
     if request.method == "DELETE":
         try:
@@ -321,6 +322,7 @@ def event_dislike(request, pk1, pk2):
 
 
 @api_view(["GET"])
+# @permission_classes([IsAuthenticated,IsParticularCoreMember])
 def core_task_list(request, pk):
     if request.method == "GET":
         try:
@@ -379,6 +381,7 @@ def core_task_list(request, pk):
 
 
 @api_view(["POST"])
+# @permission_classes([IsAuthenticated,IsParticularCoreMember])
 def core_task_create(request, pk):
     if request.method == "POST":
         try:
@@ -424,6 +427,7 @@ def core_task_create(request, pk):
 
 
 @api_view(["DELETE"])
+# @permission_classes([IsAuthenticated,IsParticularCoreMember])
 def core_task_crud(request, pk1, pk2):
     try:
         tasks = CoCommitteeTasks.objects.get(pk=pk1)
@@ -456,6 +460,7 @@ def core_task_crud(request, pk1, pk2):
 
 
 @api_view(["GET"])
+# @permission_classes([IsAuthenticated,IsParticularCoMember])
 def co_task_list(request, pk1, pk2):
     if request.method == "GET":
         try:

@@ -7,11 +7,6 @@ urlpatterns = [
     # committees
     path("committees/", views.CommitteeList.as_view(), name="committees_list"),
     path(
-        "committees/new/",
-        views.CommitteeCreate.as_view(),
-        name="committee_create",
-    ),
-    path(
         "committees/<int:pk>/",
         views.CommitteeDetail.as_view(),
         name="committee_detail",
