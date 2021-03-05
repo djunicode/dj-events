@@ -69,4 +69,7 @@ urlpatterns = [
     # login
     path("student_login/", views.student_login, name="student_login"),
     path("committee_login/", views.committee_login, name="committee_login"),
+
+    # Registration
+    path("student_registration/", views.student_registration, name="student_registration")
 ]

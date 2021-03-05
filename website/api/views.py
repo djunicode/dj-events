@@ -195,6 +195,7 @@ def student_login(request):
             password = request.data.get("password")
             user = authenticate(request, username=username, password=password)
             student = Students.objects.get(user=user)
+
             if user is not None:
                 token, _ = Token.objects.get_or_create(user=user)
 
@@ -502,4 +503,50 @@ def co_task_list(request, pk1, pk2):
         return JsonResponse(
             data={"Message": "Only POST request allowed"},
             status=status.HTTP_400_BAD_REQUEST,
+        )
+
+@api_view(["POST"])
+def student_registration(request):
+    if request.method == 'POST':
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        confirm = request.data.get('confirm')
+        sap = request.data.get('sap')
+        department = request.data.get('department')
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')        
+
+        if password == confirm:
+            if Students.objects.filter(sap=sap).exists():
+                return JsonResponse(
+                data={"Message": "SAP Already registered"},
+                status=status.HTTP_400_BAD_REQUEST,
+                )
+            if Students.objects.filter(username=username).exists():
+                return JsonResponse(
+                data={"Message": "Username Taken"},
+                status=status.HTTP_400_BAD_REQUEST,
+                )
+            elif Students.objects.filter(email=email).exists():
+                return JsonResponse(
+                data={"Message": "Email Taken"},
+                status=status.HTTP_400_BAD_REQUEST,
+                )
+            else:
+                user = Students.objects.create_user(username=username, password=password, email=email, sap=sap, department=department, first_name=first_name, last_name=last_name)
+                user.save()
+                return JsonResponse(
+                data={"Message": "User Created"},
+                )
+        else:
+            return JsonResponse(
+            data={"Message": "Passwords Do Not Match"},
+            status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    else:
+        return JsonResponse(
+        data={"Message": "Only POST request allowed"},
+        status=status.HTTP_400_BAD_REQUEST,
         )

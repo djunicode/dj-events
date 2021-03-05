@@ -126,7 +126,7 @@ class CommitteeToSubscribers(models.Model):
 class CoCommitteeTasks(models.Model):
     coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
     task = models.TextField()
-    assigned_by = models.ForeignKey(CoreCommittee, on_delete=models.CASCADE)
+    assigned_by = models.ForeignKey(CoreCommittee, on_delete=models.CASCADE, default = 1)
 
     class Meta:
         verbose_name = "CoCommitteeTask"
