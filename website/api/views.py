@@ -63,6 +63,7 @@ class CommitteeDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
+
 class CommitteeCrud(
     mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView
 ):
@@ -99,7 +100,10 @@ class EventDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class EventsCreate(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Events.objects.all()
     serializer_class = EventsSerializer
-    permission_classes = (IsAuthenticated,ForEventsCreate,)
+    permission_classes = (
+        IsAuthenticated,
+        ForEventsCreate,
+    )
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -120,7 +124,7 @@ class EventCrud(
 
 
 # Committee Page feed is provided by the following view.
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def EventFinder(request, pk):
     return JsonResponse(
@@ -134,7 +138,8 @@ def EventFinder(request, pk):
         safe=False,
     )
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def CommitteeExtraDetail(request, pk):
     try:
@@ -150,7 +155,8 @@ def CommitteeExtraDetail(request, pk):
             status=status.HTTP_204_NO_CONTENT,
         )
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def StudentProfile(request, pk):
     try:
@@ -166,8 +172,9 @@ def StudentProfile(request, pk):
             status=status.HTTP_204_NO_CONTENT,
         )
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated,ForReferralTable])
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated, ForReferralTable])
 def ReferralTable(request, pk):
     try:
         event = Events.objects.get(id=pk)
@@ -264,7 +271,7 @@ def committee_login(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated,ForEventLikeDislike])
+@permission_classes([IsAuthenticated, ForEventLikeDislike])
 def event_like(request, pk1, pk2):
     if request.method == "POST":
         try:
@@ -292,7 +299,7 @@ def event_like(request, pk1, pk2):
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated,ForEventLikeDislike])
+@permission_classes([IsAuthenticated, ForEventLikeDislike])
 def event_dislike(request, pk1, pk2):
     if request.method == "DELETE":
         try:
@@ -323,12 +330,13 @@ def event_dislike(request, pk1, pk2):
 
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated,IsParticularCoreMember])
-def core_task_list(request, pk):
+def core_task_list(request, pk1, pk2):
     if request.method == "GET":
         try:
             tasks = CoCommitteeTasks.objects.filter(
-                assigned_by__student__user__id=pk
-            ).order_by("coCommittee__committee")
+                assigned_by__student__user__id=pk1,
+                assigned_by__committee__user__id=pk2,
+            )
             serializer = CoCommitteeTasksSerializer(tasks, many=True)
             for i in range(len(serializer.data)):
                 x1 = serializer.data[i]["coCommittee"]["student"]
@@ -465,7 +473,8 @@ def co_task_list(request, pk1, pk2):
     if request.method == "GET":
         try:
             tasks = CoCommitteeTasks.objects.filter(
-                coCommittee__student__user__id=pk1
+                coCommittee__student__user__id=pk1,
+                assigned_by__committee__user__id=pk2,
             )
             serializer = CoCommitteeTasksSerializer(tasks, many=True)
             for i in range(len(serializer.data)):
@@ -517,54 +526,64 @@ def co_task_list(request, pk1, pk2):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 @api_view(["POST"])
 def student_registration(request):
-    if request.method == 'POST':
-        username = request.data.get('username')
-        email = request.data.get('email')
-        password = request.data.get('password')
-        confirm = request.data.get('confirm')
-        sap = request.data.get('sap')
-        department = request.data.get('department')
-        first_name = request.data.get('first_name')
-        last_name = request.data.get('last_name')        
+    if request.method == "POST":
+        username = request.data.get("username")
+        email = request.data.get("email")
+        password = request.data.get("password")
+        confirm = request.data.get("confirm")
+        sap = request.data.get("sap")
+        department = request.data.get("department")
+        first_name = request.data.get("first_name")
+        last_name = request.data.get("last_name")
 
         if password == confirm:
             if Students.objects.filter(sap=sap).exists():
                 return JsonResponse(
-                data={"Message": "SAP Already registered"},
-                status=status.HTTP_400_BAD_REQUEST,
+                    data={"Message": "SAP Already registered"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             if Students.objects.filter(username=username).exists():
                 return JsonResponse(
-                data={"Message": "Username Taken"},
-                status=status.HTTP_400_BAD_REQUEST,
+                    data={"Message": "Username Taken"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             elif Students.objects.filter(email=email).exists():
                 return JsonResponse(
-                data={"Message": "Email Taken"},
-                status=status.HTTP_400_BAD_REQUEST,
+                    data={"Message": "Email Taken"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             else:
-                user = Students.objects.create_user(username=username, password=password, email=email, sap=sap, department=department, first_name=first_name, last_name=last_name)
+                user = Students.objects.create_user(
+                    username=username,
+                    password=password,
+                    email=email,
+                    sap=sap,
+                    department=department,
+                    first_name=first_name,
+                    last_name=last_name,
+                )
                 user.save()
                 return JsonResponse(
-                data={"Message": "User Created"},
+                    data={"Message": "User Created"},
                 )
         else:
             return JsonResponse(
-            data={"Message": "Passwords Do Not Match"},
-            status=status.HTTP_400_BAD_REQUEST,
+                data={"Message": "Passwords Do Not Match"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
     else:
         return JsonResponse(
-        data={"Message": "Only POST request allowed"},
-        status=status.HTTP_400_BAD_REQUEST,
+            data={"Message": "Only POST request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 class ChangePasswordView(generics.UpdateAPIView):
-    
+
     serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = (IsAuthenticated,)
@@ -579,16 +598,21 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         if serializer.is_valid():
             # Check old password
-            if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            if not self.object.check_password(
+                serializer.data.get("old_password")
+            ):
+                return Response(
+                    {"old_password": ["Wrong password."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'Password updated successfully',
-                'data': []
+                "status": "success",
+                "code": status.HTTP_200_OK,
+                "message": "Password updated successfully",
+                "data": [],
             }
 
             return Response(response)

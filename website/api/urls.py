@@ -48,7 +48,9 @@ urlpatterns = [
     ),
     # tasks
     path(
-        "coretasklist/<int:pk>/", views.core_task_list, name="core_task_list"
+        "coretasklist/<int:pk1>/<int:pk2>/",
+        views.core_task_list,
+        name="core_task_list",
     ),
     path(
         "coretaskcreate/<int:pk>/",
@@ -60,12 +62,23 @@ urlpatterns = [
         views.core_task_crud,
         name="core_task_crud",
     ),
-    path("cotasklist/<int:pk>/", views.co_task_list, name="co_task_list"),
+    path(
+        "cotasklist/<int:pk1>/<int:pk2>/",
+        views.co_task_list,
+        name="co_task_list",
+    ),
     # login
     path("student_login/", views.student_login, name="student_login"),
     path("committee_login/", views.committee_login, name="committee_login"),
-
     # Registration
-    path("student_registration/", views.student_registration, name="student_registration"),
-    path('change_password/', views.ChangePasswordView.as_view(), name='change_password'),
+    path(
+        "student_registration/",
+        views.student_registration,
+        name="student_registration",
+    ),
+    path(
+        "change_password/",
+        views.ChangePasswordView.as_view(),
+        name="change_password",
+    ),
 ]
