@@ -110,6 +110,8 @@ class CommitteeSerializer(serializers.ModelSerializer):
         model = Committee
         fields = [
             "id",
+            "username",
+            "email",
             "committeeName",
             "committeeDescription",
             "committeeDept",
