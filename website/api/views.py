@@ -77,7 +77,12 @@ class CommitteeCrud(
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+        self.destroy(request, *args, **kwargs)
+        return JsonResponse(
+            {"message":"Committee Deleted Successfully"},
+            status=status.HTTP_200_OK,
+            safe=False
+        )
 
 
 """
