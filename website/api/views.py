@@ -56,6 +56,7 @@ class CommitteeList(generics.GenericAPIView):
         )
 
 
+# Detail of a particular committee based on id("GET" request)
 class CommitteeDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
@@ -64,6 +65,8 @@ class CommitteeDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
+# Update/Delete of a particular committee based on id("DELETE" or "PUT" request)
+# check if committee is updated/deleted by that committee only
 class CommitteeCrud(
     mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView
 ):
@@ -81,6 +84,8 @@ class CommitteeCrud(
 Events
 """
 
+# List of all Events("GET" request)
+
 
 class EventsList(generics.GenericAPIView):
     def get(self, request):
@@ -89,6 +94,7 @@ class EventsList(generics.GenericAPIView):
         return JsonResponse(event_list, status=status.HTTP_200_OK, safe=False)
 
 
+# Detail of a particular event based on id("GET" request)
 class EventDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
     queryset = Events.objects.all()
     serializer_class = EventsSerializer
@@ -97,6 +103,8 @@ class EventDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
+# Creating a new event("POST")
+# check if event is created for a particular committee by that committee only
 class EventsCreate(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Events.objects.all()
     serializer_class = EventsSerializer
@@ -109,6 +117,8 @@ class EventsCreate(mixins.CreateModelMixin, generics.GenericAPIView):
         return self.create(request, *args, **kwargs)
 
 
+# Update/Delete of a particular event based on id("DELETE" or "PUT" request)
+# check if event is edited/deleted for a particular committee by that committee only
 class EventCrud(
     mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView
 ):
@@ -127,79 +137,113 @@ class EventCrud(
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def EventFinder(request, pk):
-    return JsonResponse(
-        EventsSerializer(
-            Events.objects.filter(
-                organisingCommittee=Committee.objects.get(id=pk)
-            ),
-            many=True,
-        ).data,
-        status=status.HTTP_200_OK,
-        safe=False,
-    )
+    if request.method == "GET":
+        try:
+            return JsonResponse(
+                EventsSerializer(
+                    Events.objects.filter(
+                        organisingCommittee=Committee.objects.get(id=pk)
+                    ),
+                    many=True,
+                ).data,
+                status=status.HTTP_200_OK,
+                safe=False,
+            )
+        except Exception:
+            return JsonResponse(
+                data={"Message": "Internal Server Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+    else:
+        return JsonResponse(
+            data={"Message": "Only GET request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def CommitteeExtraDetail(request, pk):
-    try:
-        committee = Committee.objects.get(id=pk)
+    if request.method == "GET":
+        try:
+            committee = Committee.objects.get(id=pk)
+            return JsonResponse(
+                CommitteeDetailSerializer(committee).data,
+                status=status.HTTP_200_OK,
+                safe=False,
+            )
+        except Committee.DoesNotExist:
+            return JsonResponse(
+                {"message": "The committee does not exist"},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+    else:
         return JsonResponse(
-            CommitteeDetailSerializer(committee).data,
-            status=status.HTTP_200_OK,
-            safe=False,
-        )
-    except Committee.DoesNotExist:
-        return JsonResponse(
-            {"message": "The committee does not exist"},
-            status=status.HTTP_204_NO_CONTENT,
+            data={"Message": "Only GET request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
+# Student Profile and Detail View
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def StudentProfile(request, pk):
-    try:
-        student = Students.objects.get(id=pk)
+    if request.method == "GET":
+        try:
+            student = Students.objects.get(id=pk)
+            return JsonResponse(
+                StudentsSerializer(student).data,
+                status=status.HTTP_200_OK,
+                safe=False,
+            )
+        except Students.DoesNotExist:
+            return JsonResponse(
+                {"message": "The student does not exist"},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+    else:
         return JsonResponse(
-            StudentsSerializer(student).data,
-            status=status.HTTP_200_OK,
-            safe=False,
-        )
-    except Students.DoesNotExist:
-        return JsonResponse(
-            {"message": "The student does not exist"},
-            status=status.HTTP_204_NO_CONTENT,
+            data={"Message": "Only GET request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated, ForReferralTable])
 def ReferralTable(request, pk):
-    try:
-        event = Events.objects.get(id=pk)
-        referrals = CoCommitteeReferals.objects.filter(event=event)
-        coCommittee = CoCommittee.objects.filter(
-            committee=event.organisingCommittee
-        )
-        data = []
-        for cocom in coCommittee:
-            d = {
-                "SAP ID": cocom.student.sap,
-                "Name": cocom.student.first_name
-                + " "
-                + cocom.student.last_name,
-                "Referral Count": referrals.filter(coCommittee=cocom).count(),
-            }
-            data.append(d)
-        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
-    except Events.DoesNotExist:
+    if request.method == "GET":
+        try:
+            event = Events.objects.get(id=pk)
+            referrals = CoCommitteeReferals.objects.filter(event=event)
+            coCommittee = CoCommittee.objects.filter(
+                committee=event.organisingCommittee
+            )
+            data = []
+            for cocom in coCommittee:
+                d = {
+                    "SAP ID": cocom.student.sap,
+                    "Name": cocom.student.first_name
+                    + " "
+                    + cocom.student.last_name,
+                    "Referral Count": referrals.filter(
+                        coCommittee=cocom
+                    ).count(),
+                }
+                data.append(d)
+            return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+        except Events.DoesNotExist:
+            return JsonResponse(
+                {"message": "The event does not exist"},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+    else:
         return JsonResponse(
-            {"message": "The event does not exist"},
-            status=status.HTTP_204_NO_CONTENT,
+            data={"Message": "Only GET request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
+# Login of a student
 @api_view(["POST"])
 def student_login(request):
     if request.method == "POST":
@@ -236,6 +280,7 @@ def student_login(request):
         )
 
 
+# Login of a Committee
 @api_view(["POST"])
 def committee_login(request):
     if request.method == "POST":
@@ -270,6 +315,7 @@ def committee_login(request):
         )
 
 
+# Liking of an Event
 @api_view(["POST"])
 @permission_classes([IsAuthenticated, ForEventLikeDislike])
 def event_like(request, pk1, pk2):
@@ -298,6 +344,7 @@ def event_like(request, pk1, pk2):
         )
 
 
+# Dis-Liking of an Event
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated, ForEventLikeDislike])
 def event_dislike(request, pk1, pk2):
@@ -328,6 +375,8 @@ def event_dislike(request, pk1, pk2):
         )
 
 
+# List Of Tasks Assigned by Core
+# List depends upon the committee the core selects
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated,IsParticularCoreMember])
 def core_task_list(request, pk1, pk2):
@@ -388,6 +437,7 @@ def core_task_list(request, pk1, pk2):
         )
 
 
+# Creating Of Tasks by Core
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated,IsParticularCoreMember])
 def core_task_create(request, pk):
@@ -434,6 +484,7 @@ def core_task_create(request, pk):
         )
 
 
+# Delete Task by Core
 @api_view(["DELETE"])
 # @permission_classes([IsAuthenticated,IsParticularCoreMember])
 def core_task_crud(request, pk1, pk2):
@@ -441,7 +492,10 @@ def core_task_crud(request, pk1, pk2):
         tasks = CoCommitteeTasks.objects.get(pk=pk1)
         assigned_by = CoreCommittee.objects.get(student__user__id=pk2)
     except Exception:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            data={"Message": "Data not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     """
     if request.method == "PUT":
         serializer = CoCommitteeTasksSerializer(tasks, data=request.data)
@@ -465,8 +519,15 @@ def core_task_crud(request, pk1, pk2):
                 {"message": "You do have the required permission"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+    else:
+        return JsonResponse(
+            data={"Message": "Only DELETE request allowed"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
+# List Of Tasks Assigned to Co
+# List depends upon the committee the co selects
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated,IsParticularCoMember])
 def co_task_list(request, pk1, pk2):
@@ -527,6 +588,7 @@ def co_task_list(request, pk1, pk2):
         )
 
 
+# Student Registration
 @api_view(["POST"])
 def student_registration(request):
     if request.method == "POST":
@@ -582,6 +644,7 @@ def student_registration(request):
         )
 
 
+# Change Of password
 class ChangePasswordView(generics.UpdateAPIView):
 
     serializer_class = ChangePasswordSerializer

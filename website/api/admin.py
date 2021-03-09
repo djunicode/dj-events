@@ -15,7 +15,7 @@ from .models import (
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-# For Student Admin
+
 class StudentCreationForm(forms.ModelForm):
     class Meta:
         model = Students
@@ -29,12 +29,33 @@ class StudentCreationForm(forms.ModelForm):
             user.save()
         return user
 
+
 class CustomStudentAdmin(UserAdmin):
     add_form = StudentCreationForm
-    list_display = ("username","email", "sap", "department", "first_name", "last_name")
+    list_display = (
+        "username",
+        "email",
+        "sap",
+        "department",
+        "first_name",
+        "last_name",
+    )
     ordering = ("sap",)
 
-    fieldsets = ((None, {"fields": ("username","email", "password", "first_name", "last_name")}),)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "username",
+                    "email",
+                    "password",
+                    "first_name",
+                    "last_name",
+                )
+            },
+        ),
+    )
     add_fieldsets = (
         (
             None,
@@ -56,6 +77,7 @@ class CustomStudentAdmin(UserAdmin):
 
     filter_horizontal = ()
 
+
 # For Committee Admin
 class CommitteeCreationForm(forms.ModelForm):
     class Meta:
@@ -70,12 +92,13 @@ class CommitteeCreationForm(forms.ModelForm):
             user.save()
         return user
 
+
 class CustomCommitteeAdmin(UserAdmin):
     add_form = StudentCreationForm
     list_display = ("committeeName", "email", "committeeDept", "username")
     ordering = ("committeeName",)
 
-    fieldsets = ((None, {"fields": ("username","email", "password")}),)
+    fieldsets = ((None, {"fields": ("username", "email", "password")}),)
     add_fieldsets = (
         (
             None,
@@ -159,6 +182,7 @@ class EventsAdmin(admin.ModelAdmin):
         "is_referral",
     )
 
+
 class EventLikesAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Event", {"fields": ["event"]}),
@@ -184,6 +208,7 @@ class FacultyAdmin(admin.ModelAdmin):
         "department",
     )
 
+
 class CoCommitteeReferalsAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Student", {"fields": ["participant"]}),
@@ -195,6 +220,7 @@ class CoCommitteeReferalsAdmin(admin.ModelAdmin):
         "coCommittee",
         "event",
     )
+
 
 class CoCommitteeTasksAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -208,6 +234,7 @@ class CoCommitteeTasksAdmin(admin.ModelAdmin):
         "assigned_by",
     )
 
+
 admin.site.register(Students, CustomStudentAdmin)
 admin.site.register(Committee, CustomCommitteeAdmin)
 admin.site.register(CoCommittee, CoCommitteeAdmin)
@@ -218,4 +245,3 @@ admin.site.register(EventLikes, EventLikesAdmin)
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(CoCommitteeReferals, CoCommitteeReferalsAdmin)
 admin.site.register(CoCommitteeTasks, CoCommitteeTasksAdmin)
-

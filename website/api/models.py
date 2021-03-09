@@ -15,7 +15,9 @@ DEPARTMENT_CHOICES = [
 
 
 class Committee(User):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,parent_link=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, parent_link=True
+    )
     committeeName = models.CharField(max_length=100)
     # committeePhoto           = models.ImageField(upload_to = "")
     committeeDescription = models.TextField()
@@ -47,7 +49,9 @@ class Committee(User):
 # ----------------------------------------------------------------------------------------
 # User Models
 class Students(User):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,parent_link=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, parent_link=True
+    )
     sap_regex = RegexValidator(
         regex=r"^\+?6?\d{10,12}$", message="SAP ID must be valid"
     )
@@ -87,7 +91,13 @@ class CoCommittee(models.Model):
         verbose_name_plural = "CoCommittees"
 
     def __str__(self):
-        return str(self.committee)+" "+str(self.positionAssigned)+" "+str(self.student)
+        return (
+            str(self.committee)
+            + " "
+            + str(self.positionAssigned)
+            + " "
+            + str(self.student)
+        )
 
     @property
     def referrals(self):
@@ -108,7 +118,13 @@ class CoreCommittee(models.Model):
         verbose_name_plural = "CoreCommittees"
 
     def __str__(self):
-        return str(self.committee)+" "+str(self.positionAssigned)+" "+str(self.student)
+        return (
+            str(self.committee)
+            + " "
+            + str(self.positionAssigned)
+            + " "
+            + str(self.student)
+        )
 
 
 class CommitteeToSubscribers(models.Model):
@@ -120,20 +136,28 @@ class CommitteeToSubscribers(models.Model):
         verbose_name_plural = "CommitteeToSubscribers"
 
     def __str__(self):
-        return str(self.subscribers)+" "+str(self.committee)
+        return str(self.subscribers) + " " + str(self.committee)
 
 
 class CoCommitteeTasks(models.Model):
     coCommittee = models.ForeignKey(CoCommittee, on_delete=models.CASCADE)
     task = models.TextField()
-    assigned_by = models.ForeignKey(CoreCommittee, on_delete=models.CASCADE, default = 1)
+    assigned_by = models.ForeignKey(
+        CoreCommittee, on_delete=models.CASCADE, default=1
+    )
 
     class Meta:
         verbose_name = "CoCommitteeTask"
         verbose_name_plural = "CoCommitteeTasks"
 
     def __str__(self):
-        return str(self.coCommittee)+" "+str(self.assigned_by)+" "+str(self.id)
+        return (
+            str(self.coCommittee)
+            + " "
+            + str(self.assigned_by)
+            + " "
+            + str(self.id)
+        )
 
 
 class Faculty(models.Model):
@@ -150,7 +174,7 @@ class Faculty(models.Model):
         verbose_name_plural = "Faculties"
 
     def __str__(self):
-        return str(self.name)+" "+str(self.committee)
+        return str(self.name) + " " + str(self.committee)
 
 
 # ----------------------------------------------------------------------------------------
@@ -185,7 +209,7 @@ class Events(models.Model):
         verbose_name_plural = "Events"
 
     def __str__(self):
-        return str(self.eventName)+" "+str(self.eventDate.year)
+        return str(self.eventName) + " " + str(self.eventDate.year)
 
     @property
     def likes(self):
@@ -201,7 +225,7 @@ class EventLikes(models.Model):
         verbose_name_plural = "EventLikes"
 
     def __str__(self):
-        return str(self.student)+" "+str(self.event)
+        return str(self.student) + " " + str(self.event)
 
 
 class EventImages(models.Model):
@@ -226,4 +250,10 @@ class CoCommitteeReferals(models.Model):
         verbose_name_plural = "CoCommitteeReferals"
 
     def __str__(self):
-        return str(self.event)+" "+str(self.coCommittee)+" "+str(self.participant)
+        return (
+            str(self.event)
+            + " "
+            + str(self.coCommittee)
+            + " "
+            + str(self.participant)
+        )

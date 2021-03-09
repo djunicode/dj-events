@@ -76,6 +76,7 @@ urlpatterns = [
         views.student_registration,
         name="student_registration",
     ),
+    # password change
     path(
         "change_password/",
         views.ChangePasswordView.as_view(),

@@ -161,6 +161,7 @@ class EventLikeSerializer(serializers.ModelSerializer):
         model = EventLikes
         fields = ["id", "event", "student"]
 
+
 class ChangePasswordSerializer(serializers.Serializer):
     model = User
 
