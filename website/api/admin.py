@@ -165,11 +165,13 @@ class EventsAdmin(admin.ModelAdmin):
         ("Time", {"fields": ["eventTime"]}),
         ("Summary", {"fields": ["eventSummary"]}),
         ("Description", {"fields": ["eventDescription"]}),
-        ("OrganisingCommittee", {"fields": ["organisingCommittee"]}),
-        ("SeatingCapacity", {"fields": ["eventSeatingCapacity"]}),
+        ("Organising Committee", {"fields": ["organisingCommittee"]}),
+        ("Seating Capacity", {"fields": ["eventSeatingCapacity"]}),
         ("Venue", {"fields": ["eventVenue"]}),
-        ("RegistrationLink", {"fields": ["registrationLink"]}),
+        ("Registration Link", {"fields": ["registrationLink"]}),
         ("Referral", {"fields": ["is_referral"]}),
+        ("Contact 1", {"fields": ["contactName1","contactNumber1"]}),
+        ("Contact 2", {"fields": ["contactName2","contactNumber2"]}),
     ]
     list_display = (
         "id",
@@ -180,6 +182,10 @@ class EventsAdmin(admin.ModelAdmin):
         "eventSeatingCapacity",
         "organisingCommittee",
         "is_referral",
+        "contactName1",
+        "contactName2",
+        "contactNumber1",
+        "contactNumber2",
     )
 
 
@@ -212,7 +218,7 @@ class FacultyAdmin(admin.ModelAdmin):
 class CoCommitteeReferalsAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Student", {"fields": ["participant"]}),
-        ("CoCommittee", {"fields": ["coCommittee"]}),
+        ("Co Committee", {"fields": ["coCommittee"]}),
         ("Event", {"fields": ["event"]}),
     ]
     list_display = (
@@ -224,9 +230,9 @@ class CoCommitteeReferalsAdmin(admin.ModelAdmin):
 
 class CoCommitteeTasksAdmin(admin.ModelAdmin):
     fieldsets = [
-        ("CoCommittee", {"fields": ["coCommittee"]}),
+        ("Co Committee", {"fields": ["coCommittee"]}),
         ("Task", {"fields": ["task"]}),
-        ("AssignedBy", {"fields": ["assigned_by"]}),
+        ("Assigned By", {"fields": ["assigned_by"]}),
     ]
     list_display = (
         "coCommittee",
