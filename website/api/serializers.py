@@ -38,6 +38,7 @@ class EventsSerializer(serializers.ModelSerializer):
 
 class CoreCommitteeSerializer(serializers.ModelSerializer):
     committee = serializers.StringRelatedField()
+    student = serializers.CharField(source='student.get_full_name')
 
     class Meta:
         model = CoreCommittee
@@ -78,6 +79,7 @@ class CoCommitteeSerializer(serializers.ModelSerializer):
     referrals = CoCommitteeReferalsSerializer(many=True)
     tasks = CoCommitteeTasksSerializer(many=True)
     committee = serializers.StringRelatedField()
+    student = serializers.CharField(source='student.get_full_name')
 
     class Meta:
         model = CoCommittee
