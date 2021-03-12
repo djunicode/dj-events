@@ -170,8 +170,8 @@ class EventsAdmin(admin.ModelAdmin):
         ("Venue", {"fields": ["eventVenue"]}),
         ("Registration Link", {"fields": ["registrationLink"]}),
         ("Referral", {"fields": ["is_referral"]}),
-        ("Contact 1", {"fields": ["contactName1","contactNumber1"]}),
-        ("Contact 2", {"fields": ["contactName2","contactNumber2"]}),
+        ("Contact 1", {"fields": ["contactName1", "contactNumber1"]}),
+        ("Contact 2", {"fields": ["contactName2", "contactNumber2"]}),
     ]
     list_display = (
         "id",
@@ -235,6 +235,7 @@ class CoCommitteeTasksAdmin(admin.ModelAdmin):
         ("Assigned By", {"fields": ["assigned_by"]}),
     ]
     list_display = (
+        "id",
         "coCommittee",
         "task",
         "assigned_by",

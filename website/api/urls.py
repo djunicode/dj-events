@@ -53,7 +53,7 @@ urlpatterns = [
         name="core_task_list",
     ),
     path(
-        "coretaskcreate/<int:pk>/",
+        "coretaskcreate/<int:pk1>/<int:pk2>/",
         views.core_task_create,
         name="core_task_create",
     ),

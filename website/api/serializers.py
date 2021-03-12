@@ -14,6 +14,10 @@ from .models import (
 
 
 class EventsSerializer(serializers.ModelSerializer):
+    organisingCommitteeName = serializers.CharField(
+        source="organisingCommittee", required=False
+    )
+
     class Meta:
         model = Events
         fields = [
@@ -28,6 +32,7 @@ class EventsSerializer(serializers.ModelSerializer):
             "registrationLink",
             "is_referral",
             "organisingCommittee",
+            "organisingCommitteeName",
             "contactName1",
             "contactName2",
             "contactNumber1",
@@ -38,7 +43,7 @@ class EventsSerializer(serializers.ModelSerializer):
 
 class CoreCommitteeSerializer(serializers.ModelSerializer):
     committee = serializers.StringRelatedField()
-    student = serializers.CharField(source='student.get_full_name')
+    student = serializers.CharField(source="student.get_full_name")
 
     class Meta:
         model = CoreCommittee
@@ -64,22 +69,31 @@ class CoCommitteeReferalsSerializer(serializers.ModelSerializer):
 
 
 class CoCommitteeTasksSerializer(serializers.ModelSerializer):
+    coCommitteeName = serializers.CharField(
+        source="coCommittee", required=False
+    )
+    assignedbyName = serializers.CharField(
+        source="assigned_by", required=False
+    )
+
     class Meta:
         model = CoCommitteeTasks
         fields = [
             "id",
             "coCommittee",
+            "coCommitteeName",
             "task",
             "assigned_by",
+            "assignedbyName",
         ]
-        depth = 2
+        # depth = 2
 
 
 class CoCommitteeSerializer(serializers.ModelSerializer):
     referrals = CoCommitteeReferalsSerializer(many=True)
     tasks = CoCommitteeTasksSerializer(many=True)
     committee = serializers.StringRelatedField()
-    student = serializers.CharField(source='student.get_full_name')
+    student = serializers.CharField(source="student.get_full_name")
 
     class Meta:
         model = CoCommittee
