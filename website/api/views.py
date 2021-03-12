@@ -25,6 +25,8 @@ from .serializers import (
     EventLikeSerializer,
     CoCommitteeTasksSerializer,
     ChangePasswordSerializer,
+    CoCommitteeSerializer,
+    CoreCommitteeSerializer,
 )
 from .models import (
     Events,
@@ -657,3 +659,192 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#Creation of core committee by committee
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def upgradeToCoreCom(request, pk, position):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        to_be_upgraded = Students.objects.get(id=pk)
+
+        if CoreCommittee.objects.filter(student = to_be_upgraded, committee=committee).exists():
+            return JsonResponse(
+            data={
+                "detail": f'{to_be_upgraded.username} is already a core member for {committee}',
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        CoreCommittee.objects.create(student = to_be_upgraded, committee = committee, positionAssigned = position)
+        _ = CoCommittee.objects.filter(student = to_be_upgraded, committee = committee)
+        if _.exists():
+            _.delete()
+
+        return JsonResponse(
+                data={
+                    "detail": f'{to_be_upgraded.username} upgraded successfully',
+                    },
+                status=status.HTTP_200_OK,
+            )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+#Creation of co committee by committee
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def upgradeToCoCom(request, pk, position):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        to_be_upgraded = Students.objects.get(id=pk)
+
+        if CoCommittee.objects.filter(student = to_be_upgraded, committee=committee).exists():
+            return JsonResponse(
+            data={
+                "detail": f'{to_be_upgraded.username} is already a co-committee member for {committee}',
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        CoCommittee.objects.create(student = to_be_upgraded, committee = committee, positionAssigned = position)
+        _ = CoreCommittee.objects.filter(student = to_be_upgraded, committee = committee)
+        if _.exists():
+            _.delete()
+
+        return JsonResponse(
+                data={
+                    "detail": f'{to_be_upgraded.username} upgraded successfully',
+                    },
+                status=status.HTTP_200_OK,
+            )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+        )
+#Lists core committee members
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def listCoreCommittee(request):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        return JsonResponse(
+                CoreCommitteeSerializer(
+                    CoreCommittee.objects.filter(committee = committee),
+                    many=True
+                ).data,
+                safe=False
+            )
+        
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+#Lists co committee members
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def listCoCommittee(request):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        return JsonResponse(
+                CoCommitteeSerializer(
+                    CoCommittee.objects.filter(committee = committee),
+                    many=True
+                ).data,
+                safe=False
+            )
+        
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+#Deletes core committee members
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteCoreCommittee(request, pk):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        x = CoreCommittee.objects.get(id = pk)
+
+        if(x.committee == committee):
+            CoreCommittee.objects.get(id = pk).delete()
+        else:
+            return JsonResponse(
+            data={
+                "detail": f" {request.user} is not authorized to alter {x.committee}'s core-committee.",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+        return JsonResponse(
+            data={
+                "detail": f"{x} has been deleted from the core committee of {committee}",
+                },
+                status=status.HTTP_200_OK,
+        )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+#Deletes co committee members
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteCoCommittee(request, pk):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        x = CoCommittee.objects.get(id = pk)
+        if(x.committee == committee):
+            CoCommittee.objects.get(id = pk).delete()
+        else:
+            return JsonResponse(
+            data={
+                "detail": f" {request.user} is not authorized to alter {x.committee}'s co-committee ",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        return JsonResponse(
+            data={
+                "detail": f"{x} has been deleted from the co-committee of {committee}",
+                },
+                status=status.HTTP_200_OK,
+        )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+
+def studentList(request):
+    return JsonResponse(
+                StudentsSerializer(
+                    Students.objects.all(),
+                    many=True
+                ).data,
+                safe=False
+            )

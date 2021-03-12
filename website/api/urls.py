@@ -82,4 +82,46 @@ urlpatterns = [
         views.ChangePasswordView.as_view(),
         name="change_password",
     ),
+
+    #Core Committee and Co Committee crud operations
+    #------------------------------------------------------------------------------------
+    path(
+        "upgrade_to_core/<int:pk>/<str:position>/",
+        views.upgradeToCoreCom,
+        name="uprgade-to-core",
+    ),
+
+    path(
+    "upgrade_to_co/<int:pk>/<str:position>/",
+    views.upgradeToCoCom,
+    name="uprgade-to-co",
+    ),
+
+    path(
+    "get_core_committee_members/",
+    views.listCoreCommittee,
+    name="list-of-core-committee-members",
+    ),
+
+    path(
+    "get_co_committee_members/",
+    views.listCoCommittee,
+    name="list-of-co-committee-members",
+    ),
+
+    path(
+    "delete_core_committee_member/<int:pk>/",
+    views.deleteCoreCommittee,
+    name="delete-core-committee-members",
+    ),
+
+    path(
+    "delete_co_committee_member/<int:pk>/",
+    views.deleteCoCommittee,
+    name="delete-co-committee-members",
+    ),
+    #------------------------------------------------------------------------------------
+        
+    path("students/", views.studentList, name="student_list"),
+
 ]

@@ -34,7 +34,6 @@ class IsCommittee(permissions.BasePermission):
         except Committee.DoesNotExist:
             raise StatusException(detail="Not a Committee", status_code=400)
 
-
 class ForEventsCreate(permissions.BasePermission):
     def has_permission(self, request, view):
         event_creator = request.data.get("organisingCommittee")
@@ -45,7 +44,6 @@ class ForEventsCreate(permissions.BasePermission):
         raise StatusException(
             detail="You are not allowed to access", status_code=400
         )
-
 
 class ForReferralTable(permissions.BasePermission):
     def has_permission(self, request, view):
