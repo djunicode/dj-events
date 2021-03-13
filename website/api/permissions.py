@@ -23,6 +23,7 @@ class IsStudent(permissions.BasePermission):
     def has_permission(self, request, view):
         try:
             Students.objects.get(user__id=request.user.id)
+            return True
         except Students.DoesNotExist:
             raise StatusException(detail="Not a Student", status_code=400)
 
@@ -31,6 +32,7 @@ class IsCommittee(permissions.BasePermission):
     def has_permission(self, request, view):
         try:
             Committee.objects.get(user__id=request.user.id)
+            return True
         except Committee.DoesNotExist:
             raise StatusException(detail="Not a Committee", status_code=400)
 

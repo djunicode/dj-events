@@ -734,9 +734,9 @@ def upgradeToCoCom(request, pk, position):
 #Lists core committee members
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def listCoreCommittee(request):
+def listCoreCommittee(request, pk):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
+        committee = Committee.objects.get(id = pk)
         return JsonResponse(
                 CoreCommitteeSerializer(
                     CoreCommittee.objects.filter(committee = committee),
@@ -756,9 +756,9 @@ def listCoreCommittee(request):
 #Lists co committee members
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def listCoCommittee(request):
+def listCoCommittee(request, pk):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
+        committee = Committee.objects.get(id=pk)
         return JsonResponse(
                 CoCommitteeSerializer(
                     CoCommittee.objects.filter(committee = committee),

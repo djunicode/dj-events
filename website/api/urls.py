@@ -98,13 +98,13 @@ urlpatterns = [
     ),
 
     path(
-    "get_core_committee_members/",
+    "get_core_committee_members/<int:pk>/",
     views.listCoreCommittee,
     name="list-of-core-committee-members",
     ),
 
     path(
-    "get_co_committee_members/",
+    "get_co_committee_members/<int:pk>/",
     views.listCoCommittee,
     name="list-of-co-committee-members",
     ),
