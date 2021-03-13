@@ -208,6 +208,11 @@ def CommitteeExtraDetail(request, pk):
 @permission_classes([IsAuthenticated, IsStudent])
 def StudentProfile(request, pk):
     if request.method == "GET":
+        if request.user.id != pk:
+            return JsonResponse(
+                {"message":"You cannot access details of other students"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         try:
             student = Students.objects.get(id=pk)
             return JsonResponse(
