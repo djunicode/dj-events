@@ -288,12 +288,12 @@ def student_login(request):
                     "SapID": student.sap,
                     "Token": token.key,
                 }
-                return JsonResponse(data, status=status.HTTP_200_OK)
+                print(data)
+                return JsonResponse(data=data, status=status.HTTP_200_OK)
             else:
                 data = {"Message": "There was error authenticating"}
-                return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            print(e)
+                return JsonResponse(data=data, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
             return JsonResponse(
                 data={"Message": "Internal Server Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -328,6 +328,7 @@ def committee_login(request):
             else:
                 data = {"Message": "There was error authenticating"}
                 return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
+                
         except Exception:
             return JsonResponse(
                 data={"Message": "Internal Server Error"},
