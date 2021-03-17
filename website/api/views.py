@@ -845,6 +845,88 @@ def deleteCoCommittee(request, pk):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsCommittee])
+def changeCoCommitteePosition(request, updationId):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        to_be_updated = CoCommittee.objects.get(id=updationId)
+        if to_be_updated.committee == committee and to_be_updated.positionAssigned != request.data.get('updatedPosition'):
+            to_be_updated.positionAssigned = request.data.get('updatedPosition')
+            to_be_updated.save()
+
+            return JsonResponse(
+            data={
+                "detail": f" {request.user}'s position updated ",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        elif to_be_updated.committee == committee and to_be_updated.positionAssigned == request.data.get('updatedPosition'):
+            return JsonResponse(
+            data={
+                "detail": f" {to_be_updated.student}'s new position is same as before. Hence, not updated",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        else:
+            return JsonResponse(
+            data={
+                "detail": f" {request.user} is not authorized to alter {to_be_updated.committee}'s co-committee ",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsCommittee])
+def changeCoreCommitteePosition(request, updationId):
+    try:
+        committee = Committee.objects.get(committeeName = request.user)
+        to_be_updated = CoreCommittee.objects.get(id=updationId)
+        if to_be_updated.committee == committee and to_be_updated.positionAssigned != request.data.get('updatedPosition'):
+            to_be_updated.positionAssigned = request.data.get('updatedPosition')
+            to_be_updated.save()
+
+            return JsonResponse(
+                data={
+                    "detail": f" {request.user}'s position updated ",
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED,
+            )
+            
+        elif to_be_updated.committee == committee and to_be_updated.positionAssigned == request.data.get('updatedPosition'):
+            return JsonResponse(
+            data={
+                "detail": f" {to_be_updated.student}'s new position is same as before. Hence, not updated",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        else:
+            return JsonResponse(
+            data={
+                "detail": f" {request.user} is not authorized to alter {to_be_updated.committee}'s core-committee ",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+    
 
 def studentList(request):
     return JsonResponse(

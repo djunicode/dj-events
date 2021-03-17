@@ -92,33 +92,45 @@ urlpatterns = [
     ),
 
     path(
-    "upgrade_to_co/<int:pk>/<str:position>/",
-    views.upgradeToCoCom,
-    name="uprgade-to-co",
+        "upgrade_to_co/<int:pk>/<str:position>/",
+        views.upgradeToCoCom,
+        name="uprgade-to-co",
     ),
 
     path(
-    "get_core_committee_members/<int:pk>/",
-    views.listCoreCommittee,
-    name="list-of-core-committee-members",
+        "get_core_committee_members/<int:pk>/",
+        views.listCoreCommittee,
+        name="list-of-core-committee-members",
     ),
 
     path(
-    "get_co_committee_members/<int:pk>/",
-    views.listCoCommittee,
-    name="list-of-co-committee-members",
+        "get_co_committee_members/<int:pk>/",
+        views.listCoCommittee,
+        name="list-of-co-committee-members",
     ),
 
     path(
-    "delete_core_committee_member/<int:pk>/",
-    views.deleteCoreCommittee,
-    name="delete-core-committee-members",
+        "delete_core_committee_member/<int:pk>/",
+        views.deleteCoreCommittee,
+        name="delete-core-committee-members",
     ),
 
     path(
-    "delete_co_committee_member/<int:pk>/",
-    views.deleteCoCommittee,
-    name="delete-co-committee-members",
+        "delete_co_committee_member/<int:pk>/",
+        views.CoCommittee,
+        name="delete-co-committee-members",
+    ),
+    
+    path(
+        "change_co_committee_members_position/<int:updationId>/",
+        views.changeCoCommitteePosition,
+        name="updation-of-co-committee-members-position",
+    ),
+
+    path(
+        "change_core_committee_members_position/<int:updationId>/",
+        views.changeCoreCommitteePosition,
+        name="updation-of-core-committee-members-position",
     ),
     #------------------------------------------------------------------------------------
         
