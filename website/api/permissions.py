@@ -128,3 +128,27 @@ class ForCoTaskList(permissions.BasePermission):
             raise StatusException(
                 detail="You are not allowed to access", status_code=400
             )
+
+class IsParticularCommittee(permissions.BasePermission):
+    def has_permission(self, request, view):
+        try:
+            event = Events.objects.get(id = view.kwargs['pk'])
+            committee_accessing = Committee.objects.get(user__id=request.user.id)
+            if committee_accessing == event.organisingCommittee:
+                return True
+        except Events.DoesNotExist:
+            raise StatusException(
+                detail="Event Not Found", status_code=400
+            )
+
+class IsItTheSameCommittee(permissions.BasePermission):
+    def has_permission(self, request, view):
+        try:
+            committee_to_be_deleted_or_updated = Committee.objects.get(user__id=view.kwargs['pk'])
+            committee_accessing = Committee.objects.get(user__id=request.user.id)
+            if committee_accessing == committee_to_be_deleted_or_updated:
+                return True
+        except Committee.DoesNotExist:
+            raise StatusException(
+                detail="Committee Not Found", status_code=400
+            )

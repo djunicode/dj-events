@@ -46,6 +46,8 @@ from .permissions import (
     ForCoTaskList,
     IsStudent,
     IsCommittee,
+    IsParticularCommittee,
+    IsItTheSameCommittee,
 )
 
 """
@@ -78,11 +80,7 @@ class CommitteeCrud(
 ):
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
-    """permission_classes = (
-        IsAuthenticated,
-        IsCommittee,
-        ForCommitteeCreate,
-    )"""
+    permission_classes = (IsAuthenticated, IsCommittee, IsItTheSameCommittee,)
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -140,9 +138,11 @@ class EventCrud(
 ):
     queryset = Events.objects.all()
     serializer_class = EventsSerializer
-    # permission_classes = (IsAuthenticated,IsCommittee,IsParticularCommittee, )
+    permission_classes = (IsAuthenticated, IsCommittee, IsParticularCommittee)
+    print("Reached")
 
     def put(self, request, *args, **kwargs):
+
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
