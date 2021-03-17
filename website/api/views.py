@@ -285,6 +285,8 @@ def student_login(request):
                     "id": user.pk,
                     "Name": user.first_name + " " + user.last_name,
                     "Username": user.username,
+                    "Email": user.email,
+                    "Department": student.department,
                     "SapID": student.sap,
                     "Token": token.key,
                 }
