@@ -10,6 +10,10 @@ from rest_framework.authentication import (
     TokenAuthentication,
     BasicAuthentication,
 )
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import smtplib 
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import (
@@ -937,3 +941,74 @@ def studentList(request):
                 ).data,
                 safe=False
             )
+
+#To implement Forgot Password API
+def sendmail(receiver,subject,body):
+    msg = MIMEMultipart()
+    msg['From'] = "unicodeevents12@gmail.com" #enter YOUR EMAIL ADDRESS
+    password= "Unicode@123" #enter YOUR PASSWORD
+    msg['To']= receiver
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body))
+ 
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.starttls()
+    s.login(msg['From'],password)
+    s.sendmail(msg['From'],msg['To'],msg.as_string())
+    s.quit()
+
+class StudentForgotPassword(APIView):
+    def post(self,request):
+        sap=request.data.get('sap')
+        if Students.objects.filter(sap=sap).exists():
+            student=Students.objects.get(sap=sap)
+            student.otp_generator()
+            email_body = "Hello, please use the OTP (One Time Password) "+str(student.otp)+" to reset your password"
+            sendmail(student.email,"Password Reset Mail",str(email_body))
+            return Response({"message":"Email sent successfully","user_id":student.user.id},status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"Student does not exists"},status=status.HTTP_404_NOT_FOUND)
+
+class CommitteeForgotPassword(APIView):
+    def post(self,request):
+        email=request.data.get('email')
+        if Committee.objects.filter(email=email).exists():
+            committee=Committee.objects.get(email=email)
+            committee.otp_generator()
+            email_body = "Hello, please use the OTP (One Time Password) "+str(student.otp)+" to reset your password"
+            sendmail(committee.email,"Password Reset Mail",str(email_body))
+            return Response({"message":"Email sent successfully","user_id":committee.user.id},status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"Committee does not exists"},status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def OTPChecker(request,id):
+    otp = request.data.get('otp')
+    if User.objects.get(id=id):
+        user = User.objects.get(id=id)
+        if Students.objects.get(user=user):
+            studentorcommittee = Students.objects.get(user=user)
+        else:
+            studentorcommittee = Committee.objects.get(user=user)
+        if (studentorcommittee.otp==int(otp)):
+            studentorcommittee.otp=0
+            studentorcommittee.save()
+            return Response({"message":"OTP matched!, user is validated"},status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"OTP did not match"},status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"message":"User does not exists"},status=status.HTTP_404_NOT_FOUND)
+
+@api_view(["POST"])
+def ChangePassword(request,id):
+    user=User.objects.get(id=id)
+    new_password = request.data.get('new_password')
+    confirm_password = request.data.get('confirm_password')
+    if(new_password == confirm_password):
+        user.set_password(new_password)
+        user.otp=0
+        user.save()
+        return Response({"message":"Password changed successfully"},status=status.HTTP_200_OK)
+    else:
+        return Response({"message":"Passwords do not match"},status=status.HTTP_400_BAD_REQUEST)
+    

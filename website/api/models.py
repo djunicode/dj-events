@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+import random
 
 DEPARTMENT_CHOICES = [
     ("CSE", "Computer Science"),
@@ -25,6 +26,7 @@ class Committee(User):
         max_length=5, blank=False, choices=DEPARTMENT_CHOICES
     )
     committeeChairperson = models.CharField(max_length=200)
+    otp = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Committee"
@@ -44,6 +46,10 @@ class Committee(User):
     @property
     def facultyMembers(self):
         return self.faculty_set.all()
+    
+    def otp_generator(self):
+        self.otp=random.randint(1000,9999)
+        self.save()
 
 
 # ----------------------------------------------------------------------------------------
@@ -64,6 +70,7 @@ class Students(User):
     department = models.CharField(
         max_length=5, blank=False, choices=DEPARTMENT_CHOICES
     )
+    otp = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Student"
@@ -79,6 +86,10 @@ class Students(User):
     @property
     def coreCommittees(self):
         return self.corecommittee_set.all()
+    
+    def otp_generator(self):
+        self.otp=random.randint(1000,9999)
+        self.save()
 
 
 class CoCommittee(models.Model):

@@ -135,5 +135,10 @@ urlpatterns = [
     #------------------------------------------------------------------------------------
         
     path("students/", views.studentList, name="student_list"),
+    #------------------------------------------------------------------------------------
+    path("student_forgot_password/", views.StudentForgotPassword.as_view()),
+    path("committee_forgot_password/", views.CommitteeForgotPassword.as_view()),
+    path("otp_validator/<int:id>/",views.OTPChecker),
+    path("change_forgot_password/<int:id>/",views.ChangePassword),
 
 ]
