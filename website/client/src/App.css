@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  /* background-color: #282c34; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -27,6 +27,11 @@
 .App-link {
   color: #61dafb;
 }
+.alignhead{
+  text-align: center;
+  color: #fff;
+  font-family: Open Sans;
+}
 
 @keyframes App-logo-spin {
   from {
@@ -35,4 +40,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.mainCard{
+  width: 80%;
+  margin:50px auto ;
+  display: block;
+}
+
+button.rec-dot{
+  box-shadow: 0 0 1px 3px rgba(255, 255, 255, 0.5);
+  /* background-color: #ffffff; */
+}
+
+button.rec-dot:hover, button.rec-dot:active, button.rec-dot:focus  {
+  box-shadow: 0 0 1px 3px rgba(255, 255, 255, 0.5);
+  background-color: #ffffff;
+}
+.lgksPe:hover:enabled, .lgksPe:focus:enabled{
+  background-color: #4E586E;
+  color: #fff;
+}
+
+div .sc-iBPRYJ.bkVSTc.rec.rec-pagination{
+  display: hidden;
 }

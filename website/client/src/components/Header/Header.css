@@ -1,0 +1,22 @@
+.bg-image{
+    background-image: url('https://mdbootstrap.com/img/new/standard/nature/184.jpg');
+    height:600px;
+    border-bottom-left-radius:40%;
+    border-bottom-right-radius:40%;
+    /* background: linear-gradient(101.04deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%), url('https://mdbootstrap.com/img/new/standard/nature/184.jpg'); */
+}
+.spacingnav{
+    margin-right: 50px;
+}
+.navbar-expand-lg .navbar-nav .nav-link
+{
+    color: #ffffff;
+}
+.navbar-light .navbar-nav .active .nav-link{
+    color: #ffffff;
+}
+.navbar-expand-lg .navbar-nav .nav-link:active{
+    color: #F54B64;
+    background-color: rgba(78, 88, 110,0.85);
+    border-radius: 15px;
+}

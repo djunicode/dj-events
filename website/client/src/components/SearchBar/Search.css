@@ -1,0 +1,39 @@
+.input-group.md-form.form-sm.form-1 input {
+    /* border: 1px solid #bdbdbd;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem; */
+/* position: relative; */
+/* display: flex;
+align-items: center; */
+
+width: 550px;
+height: 70px;
+margin: 0 auto;
+background: #4E586E;
+border: 0.192236px solid #000000;
+box-sizing: border-box;
+border-radius: 192.236px;
+color: #fff;
+  }
+  /* .searchpanel{
+    
+position: absolute;
+width: 593px;
+height: 70px;
+align-content: center;
+
+  } */
+  /* .central{
+    display: flex;
+  align-items: center;
+  } */
+  .form-control{
+      margin: 0 auto;
+  }
+  .styling{
+      color: #fff;
+      font-size: 24px;
+      /* text-align: left; */
+      padding-left: 80px;
+
+  }
