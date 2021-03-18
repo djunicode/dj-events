@@ -52,6 +52,7 @@ from .permissions import (
     IsCommittee,
     IsParticularCommittee,
     IsItTheSameCommittee,
+    ForEventLikeCheck,
 )
 
 """
@@ -1011,4 +1012,22 @@ def ChangePassword(request,id):
         return Response({"message":"Password changed successfully"},status=status.HTTP_200_OK)
     else:
         return Response({"message":"Passwords do not match"},status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated, ForEventLikeCheck])
+def EventLikeCheck(request,event_id,student_id):
+    try:
+        event = Events.objects.get(id=event_id)
+    except:
+        return Response({"message":"Event does not exist"},status=status.HTTP_404_NOT_FOUND)
+    try:
+        student = Students.objects.get(id=student_id)
+    except:
+        return Response({"message":"Student does not exist"},status=status.HTTP_404_NOT_FOUND)
+    
+    try:
+        EventLikes.objects.get(student=student,event=event)
+        return Response({"event_liked":True},status=status.HTTP_200_OK)
+    except:
+        return Response({"event_liked":False},status=status.HTTP_200_OK)
     

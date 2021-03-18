@@ -140,5 +140,6 @@ urlpatterns = [
     path("committee_forgot_password/", views.CommitteeForgotPassword.as_view()),
     path("otp_validator/<int:id>/",views.OTPChecker),
     path("change_forgot_password/<int:id>/",views.ChangePassword),
+    path("event_like_check/<int:event_id>/<int:student_id>/",views.EventLikeCheck),
 
 ]

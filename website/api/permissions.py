@@ -152,3 +152,13 @@ class IsItTheSameCommittee(permissions.BasePermission):
             raise StatusException(
                 detail="Committee Not Found", status_code=400
             )
+
+class ForEventLikeCheck(permissions.BasePermission):
+    def has_permission(self,request,view):
+        if(request.user.id==view.kwargs['student_id']):
+            return True
+        else:
+            raise StatusException(
+                detail="Student Not Found", status_code=400
+            )
+            
