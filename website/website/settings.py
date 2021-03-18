@@ -27,7 +27,8 @@ SECRET_KEY = "^^b*1o2a15ybg^91w_%8hse-iyix9_tx==$j$dii(a-q&7(d0%"
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -154,3 +155,5 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
