@@ -82,64 +82,62 @@ urlpatterns = [
         views.ChangePasswordView.as_view(),
         name="change_password",
     ),
-
-    #Core Committee and Co Committee crud operations
-    #------------------------------------------------------------------------------------
+    # Core Committee and Co Committee crud operations
+    # ------------------------------------------------------------------------------------
     path(
         "upgrade_to_core/<int:pk>/<str:position>/",
         views.upgradeToCoreCom,
         name="uprgade-to-core",
     ),
-
     path(
         "upgrade_to_co/<int:pk>/<str:position>/",
         views.upgradeToCoCom,
         name="uprgade-to-co",
     ),
-
     path(
         "get_core_committee_members/<int:pk>/",
         views.listCoreCommittee,
         name="list-of-core-committee-members",
     ),
-
     path(
         "get_co_committee_members/<int:pk>/",
         views.listCoCommittee,
         name="list-of-co-committee-members",
     ),
-
     path(
         "delete_core_committee_member/<int:pk>/",
         views.deleteCoreCommittee,
         name="delete-core-committee-members",
     ),
-
     path(
         "delete_co_committee_member/<int:pk>/",
         views.CoCommittee,
         name="delete-co-committee-members",
     ),
-    
     path(
         "change_co_committee_members_position/<int:updationId>/",
         views.changeCoCommitteePosition,
         name="updation-of-co-committee-members-position",
     ),
-
     path(
         "change_core_committee_members_position/<int:updationId>/",
         views.changeCoreCommitteePosition,
         name="updation-of-core-committee-members-position",
     ),
-    #------------------------------------------------------------------------------------
-        
+    # ------------------------------------------------------------------------------------
     path("students/", views.studentList, name="student_list"),
-    #------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
     path("student_forgot_password/", views.StudentForgotPassword.as_view()),
-    path("committee_forgot_password/", views.CommitteeForgotPassword.as_view()),
-    path("otp_validator/<int:id>/",views.OTPChecker),
-    path("change_forgot_password/<int:id>/",views.ChangePassword),
-    path("event_like_check/<int:event_id>/<int:student_id>/",views.EventLikeCheck),
-
+    path(
+        "committee_forgot_password/", views.CommitteeForgotPassword.as_view()
+    ),
+    path("otp_validator/<int:id>/", views.OTPChecker),
+    path("change_forgot_password/<int:id>/", views.ChangePassword),
+    path(
+        "event_like_check/<int:event_id>/<int:student_id>/",
+        views.EventLikeCheck,
+    ),
+    # ---------------------------------------------------------------------------------------
+    path("event_search/", views.event_search, name="event_search"),
+    path("committee_search/", views.committee_search, name="committee_search"),
 ]

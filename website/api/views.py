@@ -13,7 +13,7 @@ from rest_framework.authentication import (
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-import smtplib 
+import smtplib
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import (
@@ -54,6 +54,7 @@ from .permissions import (
     IsItTheSameCommittee,
     ForEventLikeCheck,
 )
+from django.db.models import Q
 
 """
 Committees
@@ -214,7 +215,7 @@ def StudentProfile(request, pk):
     if request.method == "GET":
         if request.user.id != pk:
             return JsonResponse(
-                {"message":"You cannot access details of other students"},
+                {"message": "You cannot access details of other students"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         try:
@@ -294,11 +295,13 @@ def student_login(request):
                     "SapID": student.sap,
                     "Token": token.key,
                 }
-                
+
                 return JsonResponse(data=data, status=status.HTTP_200_OK)
             else:
                 data = {"Message": "There was error authenticating"}
-                return JsonResponse(data=data, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse(
+                    data=data, status=status.HTTP_400_BAD_REQUEST
+                )
         except Exception:
             return JsonResponse(
                 data={"Message": "Internal Server Error"},
@@ -672,166 +675,187 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#Creation of core committee by committee
+
+# Creation of core committee by committee
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def upgradeToCoreCom(request, pk, position):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
+        committee = Committee.objects.get(committeeName=request.user)
         to_be_upgraded = Students.objects.get(id=pk)
 
-        if CoreCommittee.objects.filter(student = to_be_upgraded, committee=committee).exists():
+        if CoreCommittee.objects.filter(
+            student=to_be_upgraded, committee=committee
+        ).exists():
             return JsonResponse(
-            data={
-                "detail": f'{to_be_upgraded.username} is already a core member for {committee}',
+                data={
+                    "detail": f"{to_be_upgraded.username} is already a core member for {committee}",
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        CoreCommittee.objects.create(student = to_be_upgraded, committee = committee, positionAssigned = position)
-        _ = CoCommittee.objects.filter(student = to_be_upgraded, committee = committee)
+        CoreCommittee.objects.create(
+            student=to_be_upgraded,
+            committee=committee,
+            positionAssigned=position,
+        )
+        _ = CoCommittee.objects.filter(
+            student=to_be_upgraded, committee=committee
+        )
         if _.exists():
             _.delete()
 
         return JsonResponse(
-                data={
-                    "detail": f'{to_be_upgraded.username} upgraded successfully',
-                    },
-                status=status.HTTP_200_OK,
-            )
+            data={
+                "detail": f"{to_be_upgraded.username} upgraded successfully",
+            },
+            status=status.HTTP_200_OK,
+        )
 
     except Committee.DoesNotExist:
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
-#Creation of co committee by committee
+
+# Creation of co committee by committee
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def upgradeToCoCom(request, pk, position):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
+        committee = Committee.objects.get(committeeName=request.user)
         to_be_upgraded = Students.objects.get(id=pk)
 
-        if CoCommittee.objects.filter(student = to_be_upgraded, committee=committee).exists():
+        if CoCommittee.objects.filter(
+            student=to_be_upgraded, committee=committee
+        ).exists():
             return JsonResponse(
-            data={
-                "detail": f'{to_be_upgraded.username} is already a co-committee member for {committee}',
+                data={
+                    "detail": f"{to_be_upgraded.username} is already a co-committee member for {committee}",
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        CoCommittee.objects.create(student = to_be_upgraded, committee = committee, positionAssigned = position)
-        _ = CoreCommittee.objects.filter(student = to_be_upgraded, committee = committee)
+        CoCommittee.objects.create(
+            student=to_be_upgraded,
+            committee=committee,
+            positionAssigned=position,
+        )
+        _ = CoreCommittee.objects.filter(
+            student=to_be_upgraded, committee=committee
+        )
         if _.exists():
             _.delete()
 
         return JsonResponse(
-                data={
-                    "detail": f'{to_be_upgraded.username} upgraded successfully',
-                    },
-                status=status.HTTP_200_OK,
-            )
+            data={
+                "detail": f"{to_be_upgraded.username} upgraded successfully",
+            },
+            status=status.HTTP_200_OK,
+        )
 
     except Committee.DoesNotExist:
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
         )
-#Lists core committee members
-@api_view(['GET'])
+
+
+# Lists core committee members
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def listCoreCommittee(request, pk):
     try:
-        committee = Committee.objects.get(id = pk)
+        committee = Committee.objects.get(id=pk)
         return JsonResponse(
-                CoreCommitteeSerializer(
-                    CoreCommittee.objects.filter(committee = committee),
-                    many=True
-                ).data,
-                safe=False
-            )
-        
+            CoreCommitteeSerializer(
+                CoreCommittee.objects.filter(committee=committee), many=True
+            ).data,
+            safe=False,
+        )
+
     except Committee.DoesNotExist:
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
-#Lists co committee members
-@api_view(['GET'])
+
+# Lists co committee members
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def listCoCommittee(request, pk):
     try:
         committee = Committee.objects.get(id=pk)
         return JsonResponse(
-                CoCommitteeSerializer(
-                    CoCommittee.objects.filter(committee = committee),
-                    many=True
-                ).data,
-                safe=False
-            )
-        
+            CoCommitteeSerializer(
+                CoCommittee.objects.filter(committee=committee), many=True
+            ).data,
+            safe=False,
+        )
+
     except Committee.DoesNotExist:
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
-#Deletes core committee members
-@api_view(['POST'])
+
+# Deletes core committee members
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def deleteCoreCommittee(request, pk):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
-        x = CoreCommittee.objects.get(id = pk)
+        committee = Committee.objects.get(committeeName=request.user)
+        x = CoreCommittee.objects.get(id=pk)
 
-        if(x.committee == committee):
-            CoreCommittee.objects.get(id = pk).delete()
+        if x.committee == committee:
+            CoreCommittee.objects.get(id=pk).delete()
         else:
             return JsonResponse(
-            data={
-                "detail": f" {request.user} is not authorized to alter {x.committee}'s core-committee.",
+                data={
+                    "detail": f" {request.user} is not authorized to alter {x.committee}'s core-committee.",
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         return JsonResponse(
             data={
                 "detail": f"{x} has been deleted from the core committee of {committee}",
-                },
-                status=status.HTTP_200_OK,
+            },
+            status=status.HTTP_200_OK,
         )
 
     except Committee.DoesNotExist:
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
-#Deletes co committee members
-@api_view(['POST'])
+
+# Deletes co committee members
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def deleteCoCommittee(request, pk):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
-        x = CoCommittee.objects.get(id = pk)
-        if(x.committee == committee):
-            CoCommittee.objects.get(id = pk).delete()
+        committee = Committee.objects.get(committeeName=request.user)
+        x = CoCommittee.objects.get(id=pk)
+        if x.committee == committee:
+            CoCommittee.objects.get(id=pk).delete()
         else:
             return JsonResponse(
-            data={
-                "detail": f" {request.user} is not authorized to alter {x.committee}'s co-committee ",
+                data={
+                    "detail": f" {request.user} is not authorized to alter {x.committee}'s co-committee ",
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
@@ -839,88 +863,58 @@ def deleteCoCommittee(request, pk):
         return JsonResponse(
             data={
                 "detail": f"{x} has been deleted from the co-committee of {committee}",
-                },
-                status=status.HTTP_200_OK,
+            },
+            status=status.HTTP_200_OK,
         )
 
     except Committee.DoesNotExist:
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 @permission_classes([IsAuthenticated, IsCommittee])
 def changeCoCommitteePosition(request, updationId):
     try:
-        committee = Committee.objects.get(committeeName = request.user)
+        committee = Committee.objects.get(committeeName=request.user)
         to_be_updated = CoCommittee.objects.get(id=updationId)
-        if to_be_updated.committee == committee and to_be_updated.positionAssigned != request.data.get('updatedPosition'):
-            to_be_updated.positionAssigned = request.data.get('updatedPosition')
-            to_be_updated.save()
-
-            return JsonResponse(
-            data={
-                "detail": f" {request.user}'s position updated ",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
+        if (
+            to_be_updated.committee == committee
+            and to_be_updated.positionAssigned
+            != request.data.get("updatedPosition")
+        ):
+            to_be_updated.positionAssigned = request.data.get(
+                "updatedPosition"
             )
-
-        elif to_be_updated.committee == committee and to_be_updated.positionAssigned == request.data.get('updatedPosition'):
-            return JsonResponse(
-            data={
-                "detail": f" {to_be_updated.student}'s new position is same as before. Hence, not updated",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        else:
-            return JsonResponse(
-            data={
-                "detail": f" {request.user} is not authorized to alter {to_be_updated.committee}'s co-committee ",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-    except Committee.DoesNotExist:
-        return JsonResponse(
-            data={
-                "detail": f" {request.user} is not a committee",
-                },
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated, IsCommittee])
-def changeCoreCommitteePosition(request, updationId):
-    try:
-        committee = Committee.objects.get(committeeName = request.user)
-        to_be_updated = CoreCommittee.objects.get(id=updationId)
-        if to_be_updated.committee == committee and to_be_updated.positionAssigned != request.data.get('updatedPosition'):
-            to_be_updated.positionAssigned = request.data.get('updatedPosition')
             to_be_updated.save()
 
             return JsonResponse(
                 data={
                     "detail": f" {request.user}'s position updated ",
-                    },
-                    status=status.HTTP_401_UNAUTHORIZED,
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
             )
-            
-        elif to_be_updated.committee == committee and to_be_updated.positionAssigned == request.data.get('updatedPosition'):
+
+        elif (
+            to_be_updated.committee == committee
+            and to_be_updated.positionAssigned
+            == request.data.get("updatedPosition")
+        ):
             return JsonResponse(
-            data={
-                "detail": f" {to_be_updated.student}'s new position is same as before. Hence, not updated",
+                data={
+                    "detail": f" {to_be_updated.student}'s new position is same as before. Hence, not updated",
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
         else:
             return JsonResponse(
-            data={
-                "detail": f" {request.user} is not authorized to alter {to_be_updated.committee}'s core-committee ",
+                data={
+                    "detail": f" {request.user} is not authorized to alter {to_be_updated.committee}'s co-committee ",
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
@@ -929,105 +923,239 @@ def changeCoreCommitteePosition(request, updationId):
         return JsonResponse(
             data={
                 "detail": f" {request.user} is not a committee",
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsCommittee])
+def changeCoreCommitteePosition(request, updationId):
+    try:
+        committee = Committee.objects.get(committeeName=request.user)
+        to_be_updated = CoreCommittee.objects.get(id=updationId)
+        if (
+            to_be_updated.committee == committee
+            and to_be_updated.positionAssigned
+            != request.data.get("updatedPosition")
+        ):
+            to_be_updated.positionAssigned = request.data.get(
+                "updatedPosition"
+            )
+            to_be_updated.save()
+
+            return JsonResponse(
+                data={
+                    "detail": f" {request.user}'s position updated ",
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
             )
-    
+
+        elif (
+            to_be_updated.committee == committee
+            and to_be_updated.positionAssigned
+            == request.data.get("updatedPosition")
+        ):
+            return JsonResponse(
+                data={
+                    "detail": f" {to_be_updated.student}'s new position is same as before. Hence, not updated",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        else:
+            return JsonResponse(
+                data={
+                    "detail": f" {request.user} is not authorized to alter {to_be_updated.committee}'s core-committee ",
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+
 
 def studentList(request):
     return JsonResponse(
-                StudentsSerializer(
-                    Students.objects.all(),
-                    many=True
-                ).data,
-                safe=False
-            )
+        StudentsSerializer(Students.objects.all(), many=True).data, safe=False
+    )
 
-#To implement Forgot Password API
-def sendmail(receiver,subject,body):
+
+# To implement Forgot Password API
+def sendmail(receiver, subject, body):
     msg = MIMEMultipart()
-    msg['From'] = "unicodeevents12@gmail.com" #enter YOUR EMAIL ADDRESS
-    password= "Unicode@123" #enter YOUR PASSWORD
-    msg['To']= receiver
-    msg['Subject'] = subject
+    msg["From"] = "unicodeevents12@gmail.com"  # enter YOUR EMAIL ADDRESS
+    password = "Unicode@123"  # enter YOUR PASSWORD
+    msg["To"] = receiver
+    msg["Subject"] = subject
     msg.attach(MIMEText(body))
- 
-    s = smtplib.SMTP('smtp.gmail.com', 587)
+
+    s = smtplib.SMTP("smtp.gmail.com", 587)
     s.starttls()
-    s.login(msg['From'],password)
-    s.sendmail(msg['From'],msg['To'],msg.as_string())
+    s.login(msg["From"], password)
+    s.sendmail(msg["From"], msg["To"], msg.as_string())
     s.quit()
 
+
 class StudentForgotPassword(APIView):
-    def post(self,request):
-        sap=request.data.get('sap')
+    def post(self, request):
+        sap = request.data.get("sap")
         if Students.objects.filter(sap=sap).exists():
-            student=Students.objects.get(sap=sap)
+            student = Students.objects.get(sap=sap)
             student.otp_generator()
-            email_body = "Hello, please use the OTP (One Time Password) "+str(student.otp)+" to reset your password"
-            sendmail(student.email,"Password Reset Mail",str(email_body))
-            return Response({"message":"Email sent successfully","user_id":student.user.id},status=status.HTTP_200_OK)
+            email_body = (
+                "Hello, please use the OTP (One Time Password) "
+                + str(student.otp)
+                + " to reset your password"
+            )
+            sendmail(student.email, "Password Reset Mail", str(email_body))
+            return Response(
+                {
+                    "message": "Email sent successfully",
+                    "user_id": student.user.id,
+                },
+                status=status.HTTP_200_OK,
+            )
         else:
-            return Response({"message":"Student does not exists"},status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "Student does not exists"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
 
 class CommitteeForgotPassword(APIView):
-    def post(self,request):
-        email=request.data.get('email')
+    def post(self, request):
+        email = request.data.get("email")
         if Committee.objects.filter(email=email).exists():
-            committee=Committee.objects.get(email=email)
+            committee = Committee.objects.get(email=email)
             committee.otp_generator()
-            email_body = "Hello, please use the OTP (One Time Password) "+str(student.otp)+" to reset your password"
-            sendmail(committee.email,"Password Reset Mail",str(email_body))
-            return Response({"message":"Email sent successfully","user_id":committee.user.id},status=status.HTTP_200_OK)
+            email_body = (
+                "Hello, please use the OTP (One Time Password) "
+                + str(committee.otp)
+                + " to reset your password"
+            )
+            sendmail(committee.email, "Password Reset Mail", str(email_body))
+            return Response(
+                {
+                    "message": "Email sent successfully",
+                    "user_id": committee.user.id,
+                },
+                status=status.HTTP_200_OK,
+            )
         else:
-            return Response({"message":"Committee does not exists"},status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"message": "Committee does not exists"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
-@api_view(['POST'])
-def OTPChecker(request,id):
-    otp = request.data.get('otp')
+
+@api_view(["POST"])
+def OTPChecker(request, id):
+    otp = request.data.get("otp")
     if User.objects.get(id=id):
         user = User.objects.get(id=id)
         if Students.objects.get(user=user):
             studentorcommittee = Students.objects.get(user=user)
         else:
             studentorcommittee = Committee.objects.get(user=user)
-        if (studentorcommittee.otp==int(otp)):
-            studentorcommittee.otp=0
+        if studentorcommittee.otp == int(otp):
+            studentorcommittee.otp = 0
             studentorcommittee.save()
-            return Response({"message":"OTP matched!, user is validated"},status=status.HTTP_200_OK)
+            return Response(
+                {"message": "OTP matched!, user is validated"},
+                status=status.HTTP_200_OK,
+            )
         else:
-            return Response({"message":"OTP did not match"},status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "OTP did not match"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     else:
-        return Response({"message":"User does not exists"},status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {"message": "User does not exists"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
 
 @api_view(["POST"])
-def ChangePassword(request,id):
-    user=User.objects.get(id=id)
-    new_password = request.data.get('new_password')
-    confirm_password = request.data.get('confirm_password')
-    if(new_password == confirm_password):
+def ChangePassword(request, id):
+    user = User.objects.get(id=id)
+    new_password = request.data.get("new_password")
+    confirm_password = request.data.get("confirm_password")
+    if new_password == confirm_password:
         user.set_password(new_password)
-        user.otp=0
+        user.otp = 0
         user.save()
-        return Response({"message":"Password changed successfully"},status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Password changed successfully"},
+            status=status.HTTP_200_OK,
+        )
     else:
-        return Response({"message":"Passwords do not match"},status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"message": "Passwords do not match"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated, ForEventLikeCheck])
-def EventLikeCheck(request,event_id,student_id):
+def EventLikeCheck(request, event_id, student_id):
     try:
         event = Events.objects.get(id=event_id)
-    except:
-        return Response({"message":"Event does not exist"},status=status.HTTP_404_NOT_FOUND)
+    except Exception:
+        return Response(
+            {"message": "Event does not exist"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     try:
         student = Students.objects.get(id=student_id)
-    except:
-        return Response({"message":"Student does not exist"},status=status.HTTP_404_NOT_FOUND)
-    
+    except Exception:
+        return Response(
+            {"message": "Student does not exist"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
     try:
-        EventLikes.objects.get(student=student,event=event)
-        return Response({"event_liked":True},status=status.HTTP_200_OK)
-    except:
-        return Response({"event_liked":False},status=status.HTTP_200_OK)
-    
+        EventLikes.objects.get(student=student, event=event)
+        return Response({"event_liked": True}, status=status.HTTP_200_OK)
+    except Exception:
+        return Response({"event_liked": False}, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def event_search(request):
+    if request.method == "GET":
+        search = request.data.get("q")
+        events = Events.objects.filter(Q(eventName__icontains=search))
+        if events:
+            event_list = EventsSerializer(events, many=True).data
+            return JsonResponse(
+                event_list, status=status.HTTP_200_OK, safe=False
+            )
+        else:
+            return JsonResponse(
+                {"message": "No Events Found"}, status=status.HTTP_200_OK
+            )
+
+
+@api_view(["GET"])
+def committee_search(request):
+    if request.method == "GET":
+        search = request.data.get("q")
+        committees = Committee.objects.filter(
+            Q(committeeName__icontains=search)
+        )
+        if committees:
+            committee_list = CommitteeSerializer(committees, many=True).data
+            return JsonResponse(
+                committee_list, status=status.HTTP_200_OK, safe=False
+            )
+        else:
+            return JsonResponse(
+                {"message": "No Committees Found"}, status=status.HTTP_200_OK
+            )
