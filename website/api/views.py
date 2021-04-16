@@ -1127,9 +1127,9 @@ def EventLikeCheck(request, event_id, student_id):
         return Response({"event_liked": False}, status=status.HTTP_200_OK)
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def event_search(request):
-    if request.method == "GET":
+    if request.method == "POST":
         search = request.data.get("q")
         events = Events.objects.filter(Q(eventName__icontains=search))
         if events:
@@ -1143,9 +1143,9 @@ def event_search(request):
             )
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def committee_search(request):
-    if request.method == "GET":
+    if request.method == "POST":
         search = request.data.get("q")
         committees = Committee.objects.filter(
             Q(committeeName__icontains=search)
