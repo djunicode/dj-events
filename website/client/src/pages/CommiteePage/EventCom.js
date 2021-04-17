@@ -11,21 +11,19 @@ const breakPoints = [
   // { width: 1200, itemsToShow: 4 },
 ];
 
-const Events = () => {
+const EventCom = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://aryan123456.pythonanywhere.com/api/events/")
+      .get("http://127.0.0.1:8000/api/events/")
       .then((response) => setEvents(response.data))
       .catch((err) => console.error(err));
   }, []);
 
   return (
     <div>
-      <div style={{ marginTop: "80px" }} className="alignhead">
-        <h1>Events Coming Up</h1>
-      </div>
+      <div style={{ marginTop: "80px" }} className="alignhead"></div>
       <div className="d-flex align-items-center mainCard">
         <Carousel breakPoints={breakPoints}>
           {events.map((event) => (
@@ -33,8 +31,6 @@ const Events = () => {
               key={event.id}
               id={event.id}
               name={event.eventName}
-              summary={event.eventSummary}
-              committeeName={event.organisingCommitteeName}
               committeeId={event.organisingCommittee}
             />
           ))}
@@ -44,4 +40,4 @@ const Events = () => {
   );
 };
 
-export default Events;
+export default EventCom;

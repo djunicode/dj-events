@@ -12,22 +12,18 @@ const breakPoints = [
   // { width: 1200, itemsToShow: 4 },
 ];
 
-const Committees = () => {
+const Members = () => {
   const [committees, setCommittees] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://aryan123456.pythonanywhere.com/api/committees/")
+      .get("http://127.0.0.1:8000/api/committees/")
       .then((response) => setCommittees(response.data))
       .catch((err) => console.error(err));
   }, []);
 
   return (
     <div>
-      <div className="alignhead">
-        <h1>Commitees To View</h1>
-      </div>
-      <SearchPage />
       <div className="d-flex align-items-center mainCard">
         <Grid
           container
@@ -50,4 +46,4 @@ const Committees = () => {
   );
 };
 
-export default Committees;
+export default Members;

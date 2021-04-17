@@ -1,0 +1,30 @@
+.com_name {
+  color: #fff;
+  text-align: center;
+}
+.inner_title {
+  color: #f54b64;
+  text-align: center;
+}
+.inner_title2 {
+  color: #f54b64;
+  margin-left: 60px;
+  display: inline-block;
+}
+.year {
+  display: inline-block;
+  float: right;
+  margin-right: 60px;
+  background-color: rgba(78, 88, 110, 0.85);
+  width: fit-content;
+  padding: 7px 10px;
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.87);
+}
+.center_card {
+  margin: 30px auto;
+}
+.align {
+  text-align: center;
+  margin: 20px 0px;
+}
