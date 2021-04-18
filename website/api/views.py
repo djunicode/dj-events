@@ -329,8 +329,8 @@ def committee_login(request):
                 login(request, user)
                 data = {
                     "id": user.pk,
-                    "Committee Name": committee.committeeName,
-                    "Committee Department": committee.committeeDept,
+                    "CommitteeName": committee.committeeName,
+                    "CommitteeDepartment": committee.committeeDept,
                     "Token": token.key,
                 }
                 return JsonResponse(data, status=status.HTTP_200_OK)
