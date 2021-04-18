@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
   const classes = useStyles();
 
   const signIn = () => {
@@ -47,15 +48,30 @@ export default function Login() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        console.log(result.Token);
+        if (result.Message) {
+          setMsg("Invalid username or password");
+        } else {
+          setMsg("");
+          const logged = true;
+          localStorage.setItem("Token", result.Token);
+          localStorage.setItem("CommitteeName", result.CommitteeName);
+          localStorage.setItem(
+            "CommitteeDepartment",
+            result.CommitteeDepartment
+          );
+          localStorage.setItem("id", result.id);
+          localStorage.setItem("logged", logged);
+        }
       })
       .catch((error) => console.log("error", error));
   };
 
   return (
     <div className={classes.Login}>
+      <br />
       <form className={classes.form}>
+        <h1>Welcome Back!</h1>
+        {msg === "" ? "" : <div style={{ color: "red" }}>{msg}</div>}
         <TextField
           variant="outlined"
           margin="normal"
