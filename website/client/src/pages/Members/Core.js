@@ -21,7 +21,7 @@ const Core = () => {
     axios(config)
       .then((response) => setCore(response.data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [core]);
 
   return (
     <div>

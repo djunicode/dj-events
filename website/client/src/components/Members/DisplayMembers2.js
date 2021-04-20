@@ -5,8 +5,19 @@ import Avatar from "@material-ui/core/Avatar";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  name: {
+    fontFamily: "Roboto",
+    fontWeight: "normal",
+    fontStyle: "normal",
+    lineHeight: "23px",
+    fontSize: "19.6037px",
+  },
   position: {
-    fontSize: "0.8rem",
+    fontFamily: "Roboto",
+    fontWeight: "normal",
+    fontStyle: "normal",
+    lineHeight: "19.14px",
+    fontSize: "16.34px",
   },
   btn: {
     margin: "5%",
@@ -62,11 +73,9 @@ const DisplayMembers2 = ({ id, name, positionAssigned }) => {
               <Avatar className={classes.colour}>{initials}</Avatar>
             </div>
             <div>
-              <span>
-                <strong>{name}</strong>
-              </span>
+              <span className={classes.name}>John Smith</span>
               <br />
-              <span className={classes.position}>{positionAssigned}</span>
+              <span className={classes.position}>60004190126</span>
             </div>
           </div>
         </Grid>
