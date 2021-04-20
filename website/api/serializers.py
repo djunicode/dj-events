@@ -152,6 +152,16 @@ class CommitteeDetailSerializer(serializers.ModelSerializer):
         ]
         depth = 2
 
+class ListStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Students
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "sap",
+        ]
 
 class StudentsSerializer(serializers.ModelSerializer):
     coCommittees = CoCommitteeSerializer(many=True)

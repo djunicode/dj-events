@@ -140,4 +140,6 @@ urlpatterns = [
     # ---------------------------------------------------------------------------------------
     path("event_search/", views.event_search, name="event_search"),
     path("committee_search/", views.committee_search, name="committee_search"),
+    path("noncocom_list/<int:pk>/",views.listNonCoCommittee, name="non_cocom_list"),
+    path("noncorecom_list/<int:pk>/",views.listNonCoreCommittee, name="non_corecom_list"),
 ]

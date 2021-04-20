@@ -31,6 +31,7 @@ from .serializers import (
     ChangePasswordSerializer,
     CoCommitteeSerializer,
     CoreCommitteeSerializer,
+    ListStudentSerializer,
 )
 from .models import (
     Events,
@@ -809,6 +810,61 @@ def listCoCommittee(request, pk):
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
+# List of members not in the co committee
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def listNonCoCommittee(request, pk):
+    try:
+        committee = Committee.objects.get(id=pk)
+        cocommittee = CoCommittee.objects.filter(committee=committee)
+        cocomstudents = set()
+        for i in cocommittee:
+            cocomstudents.add(i.student)
+        students = Students.objects.all()
+        students = set(students)
+        students = students.difference(cocomstudents)
+        return JsonResponse(
+            ListStudentSerializer(
+                students, many=True
+            ).data,
+            safe=False,
+        )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+# List of members not in the core committee
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def listNonCoreCommittee(request, pk):
+    try:
+        committee = Committee.objects.get(id=pk)
+        corecommittee = CoreCommittee.objects.filter(committee=committee)
+        corecomstudents = set()
+        for i in corecommittee:
+            corecomstudents.add(i.student)
+        students = Students.objects.all()
+        students = set(students)
+        students = students.difference(corecomstudents)
+        return JsonResponse(
+            ListStudentSerializer(
+                students, many=True
+            ).data,
+            safe=False,
+        )
+
+    except Committee.DoesNotExist:
+        return JsonResponse(
+            data={
+                "detail": f" {request.user} is not a committee",
+            },
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
 
 # Deletes core committee members
 @api_view(["POST"])
