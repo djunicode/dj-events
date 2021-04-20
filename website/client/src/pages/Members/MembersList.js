@@ -1,7 +1,9 @@
 import React from "react";
 import Co from "./Co";
 import Core from "./Core";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -10,6 +12,10 @@ const useStyles = makeStyles((theme) => ({
   },
   border: {
     borderRight: "2px solid black",
+  },
+  add: {
+    backgroundColour: "#FFFFFF",
+    borderRadius: "27.5px",
   },
 }));
 
@@ -22,9 +28,23 @@ const MembersList = () => {
         <Grid item xs={10}>
           <Grid container spacing={5}>
             <Grid item xs={6} className={classes.border}>
+              <Button
+                variant="contained"
+                className={classes.add}
+                startIcon={<AddCircleRoundedIcon />}
+              >
+                Add A Core Member
+              </Button>
               <Core />
             </Grid>
             <Grid item xs={6}>
+              <Button
+                variant="contained"
+                className={classes.add}
+                startIcon={<AddCircleRoundedIcon />}
+              >
+                Add A Co-Committee Member
+              </Button>
               <Co />
             </Grid>
           </Grid>

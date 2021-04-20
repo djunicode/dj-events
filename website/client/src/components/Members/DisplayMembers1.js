@@ -28,7 +28,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DisplayMembers = ({ id, name, positionAssigned }) => {
+const DisplayMembers1 = ({ id, name, positionAssigned }) => {
+  const removeCo = () => {
+    var token = localStorage.getItem("Token");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Token ${token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      `http://aryan123456.pythonanywhere.com/api/delete_co_committee_member/${id}/`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   const classes = useStyles();
   let substrings = name.split(" ");
   let f = substrings[0].charAt(0);
@@ -53,7 +73,11 @@ const DisplayMembers = ({ id, name, positionAssigned }) => {
         </Grid>
         <Grid item xs={3}>
           <div className={classes.part2}>
-            <Button variant="outlined" className={classes.btn}>
+            <Button
+              variant="outlined"
+              onClick={removeCo}
+              className={classes.btn}
+            >
               Remove
             </Button>
           </div>
@@ -62,4 +86,4 @@ const DisplayMembers = ({ id, name, positionAssigned }) => {
     </div>
   );
 };
-export default DisplayMembers;
+export default DisplayMembers1;

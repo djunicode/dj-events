@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DisplayMembers from "../../components/Members/DisplayMembers";
+import DisplayMembers2 from "../../components/Members/DisplayMembers2";
 
 const Core = () => {
   const [core, setCore] = useState([]);
@@ -26,7 +26,7 @@ const Core = () => {
   return (
     <div>
       {core.map((x) => (
-        <DisplayMembers
+        <DisplayMembers2
           key={x.id}
           id={x.id}
           name={x.student}
