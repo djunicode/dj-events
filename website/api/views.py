@@ -815,9 +815,8 @@ def listCoCommittee(request, pk):
 @permission_classes([IsAuthenticated])
 def deleteCoreCommittee(request, pk):
     try:
-        committee = Committee.objects.get(committeeName=request.user)
+        committee = Committee.objects.get(user=request.user)
         x = CoreCommittee.objects.get(id=pk)
-
         if x.committee == committee:
             CoreCommittee.objects.get(id=pk).delete()
         else:
@@ -848,7 +847,7 @@ def deleteCoreCommittee(request, pk):
 @permission_classes([IsAuthenticated])
 def deleteCoCommittee(request, pk):
     try:
-        committee = Committee.objects.get(committeeName=request.user)
+        committee = Committee.objects.get(user=request.user)
         x = CoCommittee.objects.get(id=pk)
         if x.committee == committee:
             CoCommittee.objects.get(id=pk).delete()

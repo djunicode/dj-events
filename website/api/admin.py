@@ -128,6 +128,7 @@ class CoCommitteeAdmin(admin.ModelAdmin):
         ("Position", {"fields": ["positionAssigned"]}),
     ]
     list_display = (
+        "id",
         "student",
         "committee",
         "positionAssigned",
@@ -141,6 +142,7 @@ class CoreCommitteeAdmin(admin.ModelAdmin):
         ("Position", {"fields": ["positionAssigned"]}),
     ]
     list_display = (
+        "id",
         "student",
         "committee",
         "positionAssigned",
