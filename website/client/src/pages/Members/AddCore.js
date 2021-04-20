@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DisplayMembers1 from "../../components/Members/DisplayMembers1";
 
 const AddCore = () => {
+  let a = [];
   const [students, setStudents] = useState([]);
-  var x = localStorage.getItem("id");
+  var id = localStorage.getItem("id");
   var data = "";
   var token = localStorage.getItem("Token");
   var config = {
     method: "get",
-    url: "http://aryan123456.pythonanywhere.com/api/students/",
+    url: `http://aryan123456.pythonanywhere.com/api/noncorecom_list/${id}`,
     headers: {
       Authorization: "Token " + token,
     },
@@ -17,13 +17,21 @@ const AddCore = () => {
   };
   useEffect(() => {
     axios(config)
-      .then((response) => console.log(response.data))
+      .then((response) => setStudents(response.data))
       .catch((err) => console.error(err));
   }, []);
 
+  console.log(students);
   return (
     <div>
-      <h1>Hello</h1>
+      {students.map((x, index) => (
+        <div>
+          <p>
+            {x.first_name} {x.last_name}
+          </p>
+          <p>{x.username}</p>
+        </div>
+      ))}
     </div>
   );
 };

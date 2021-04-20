@@ -73,7 +73,7 @@ const DisplayMembers2 = ({ id, name, positionAssigned }) => {
               <Avatar className={classes.colour}>{initials}</Avatar>
             </div>
             <div>
-              <span className={classes.name}>John Smith</span>
+              <span className={classes.name}>{name}</span>
               <br />
               <span className={classes.position}>60004190126</span>
             </div>
