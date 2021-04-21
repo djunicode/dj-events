@@ -31,15 +31,19 @@ const MembersList = () => {
   const addCoCommittee = () => {
     setAddCo(true);
   };
+
   const addCoreCommittee = () => {
     setAddCore(true);
   };
+
   const back1 = () => {
     if (addCo) setAddCo(false);
   };
+
   const back2 = () => {
     if (addCore) setAddCore(false);
   };
+
   const classes = useStyles();
   return (
     <div className={classes.memberlist}>

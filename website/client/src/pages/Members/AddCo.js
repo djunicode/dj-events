@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles } from "@material-ui/core/styles";
+import ModalComponent from "../../components/Members/ModalComponent";
 
 const useStyles = makeStyles((theme) => ({
   name: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "23px",
     fontSize: "19.6037px",
   },
-  position: {
+  sap: {
     fontFamily: "Roboto",
     fontWeight: "normal",
     fontStyle: "normal",
@@ -41,9 +42,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddCo = () => {
-  let initials = "";
   const classes = useStyles();
   const [students, setStudents] = useState([]);
+  const [open, setOpen] = React.useState(false);
+
+  const user_type = "Co";
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   var id = localStorage.getItem("id");
   var data = "";
   var token = localStorage.getItem("Token");
@@ -59,9 +71,7 @@ const AddCo = () => {
     axios(config)
       .then((response) => setStudents(response.data))
       .catch((err) => console.error(err));
-  }, [students]);
-
-  console.log(students);
+  }, []);
   return (
     <div>
       {students.map((x, index) => (
@@ -71,10 +81,7 @@ const AddCo = () => {
               <div className={classes.part1}>
                 <div className={classes.avatar}>
                   <Avatar className={classes.colour}>
-                    {
-                      (initials =
-                        x.first_name.charAt(0) + x.last_name.charAt(0))
-                    }
+                    {x.first_name.charAt(0) + x.last_name.charAt(0)}
                   </Avatar>
                 </div>
                 <div>
@@ -82,19 +89,20 @@ const AddCo = () => {
                     {x.first_name} {x.last_name}
                   </span>
                   <br />
-                  <span className={classes.position}>{x.username}</span>
+                  <span className={classes.sap}>{x.username}</span>
                 </div>
               </div>
             </Grid>
             <Grid item xs={3}>
               <div className={classes.part2}>
-                <Button
-                  variant="outlined"
-                  //onClick={removeCore}
-                  className={classes.btn}
-                >
-                  Add
-                </Button>
+                <ModalComponent
+                  username={x.username}
+                  id={x.id}
+                  first_name={x.first_name}
+                  last_name={x.last_name}
+                  isCo={1}
+                  isCore={0}
+                />
               </div>
             </Grid>
           </Grid>
