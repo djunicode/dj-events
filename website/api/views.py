@@ -678,11 +678,12 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 # Creation of core committee by committee
+@csrf_exempt
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def upgradeToCoreCom(request, pk, position):
     try:
-        committee = Committee.objects.get(committeeName=request.user)
+        committee = Committee.objects.get(User=request.user)
         to_be_upgraded = Students.objects.get(id=pk)
 
         if CoreCommittee.objects.filter(
@@ -723,11 +724,12 @@ def upgradeToCoreCom(request, pk, position):
 
 
 # Creation of co committee by committee
+@csrf_exempt
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def upgradeToCoCom(request, pk, position):
     try:
-        committee = Committee.objects.get(committeeName=request.user)
+        committee = Committee.objects.get(user=request.user)
         to_be_upgraded = Students.objects.get(id=pk)
 
         if CoCommittee.objects.filter(
@@ -810,6 +812,7 @@ def listCoCommittee(request, pk):
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
+
 # List of members not in the co committee
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -824,9 +827,7 @@ def listNonCoCommittee(request, pk):
         students = set(students)
         students = students.difference(cocomstudents)
         return JsonResponse(
-            ListStudentSerializer(
-                students, many=True
-            ).data,
+            ListStudentSerializer(students, many=True).data,
             safe=False,
         )
 
@@ -837,6 +838,7 @@ def listNonCoCommittee(request, pk):
             },
             status=status.HTTP_401_UNAUTHORIZED,
         )
+
 
 # List of members not in the core committee
 @api_view(["GET"])
@@ -852,9 +854,7 @@ def listNonCoreCommittee(request, pk):
         students = set(students)
         students = students.difference(corecomstudents)
         return JsonResponse(
-            ListStudentSerializer(
-                students, many=True
-            ).data,
+            ListStudentSerializer(students, many=True).data,
             safe=False,
         )
 
@@ -866,7 +866,9 @@ def listNonCoreCommittee(request, pk):
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
+
 # Deletes core committee members
+@csrf_exempt
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def deleteCoreCommittee(request, pk):
@@ -899,6 +901,7 @@ def deleteCoreCommittee(request, pk):
 
 
 # Deletes co committee members
+@csrf_exempt
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def deleteCoCommittee(request, pk):

@@ -33,6 +33,7 @@ class StudentCreationForm(forms.ModelForm):
 class CustomStudentAdmin(UserAdmin):
     add_form = StudentCreationForm
     list_display = (
+        "id",
         "username",
         "email",
         "sap",
@@ -95,7 +96,13 @@ class CommitteeCreationForm(forms.ModelForm):
 
 class CustomCommitteeAdmin(UserAdmin):
     add_form = StudentCreationForm
-    list_display = ("committeeName", "email", "committeeDept", "username")
+    list_display = (
+        "id",
+        "committeeName",
+        "email",
+        "committeeDept",
+        "username",
+    )
     ordering = ("committeeName",)
 
     fieldsets = ((None, {"fields": ("username", "email", "password")}),)
@@ -210,6 +217,7 @@ class FacultyAdmin(admin.ModelAdmin):
         ("Department", {"fields": ["department"]}),
     ]
     list_display = (
+        "id",
         "name",
         "positionAssigned",
         "committee",
