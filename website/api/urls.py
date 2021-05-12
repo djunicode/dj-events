@@ -37,12 +37,12 @@ urlpatterns = [
     ),
     # event like dislike
     path(
-        "event_like/<int:pk1>/<int:pk2>/",
+        "event_like/<int:pk1>/",
         views.event_like,
         name="event_like",
     ),
     path(
-        "event_dislike/<int:pk1>/<int:pk2>/",
+        "event_dislike/<int:pk1>/",
         views.event_dislike,
         name="event_dislike",
     ),
@@ -140,6 +140,14 @@ urlpatterns = [
     # ---------------------------------------------------------------------------------------
     path("event_search/", views.event_search, name="event_search"),
     path("committee_search/", views.committee_search, name="committee_search"),
-    path("noncocom_list/<int:pk>/",views.listNonCoCommittee, name="non_cocom_list"),
-    path("noncorecom_list/<int:pk>/",views.listNonCoreCommittee, name="non_corecom_list"),
+    path(
+        "noncocom_list/<int:pk>/",
+        views.listNonCoCommittee,
+        name="non_cocom_list",
+    ),
+    path(
+        "noncorecom_list/<int:pk>/",
+        views.listNonCoreCommittee,
+        name="non_corecom_list",
+    ),
 ]
