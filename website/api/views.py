@@ -1217,3 +1217,12 @@ def committee_search(request):
             return JsonResponse(
                 {"message": "No Committees Found"}, status=status.HTTP_200_OK
             )
+@api_view(["GET"])
+def get_liked_events_for_a_user(request, student_id):
+    x = EventLikes.objects.filter(student=student_id)
+    array_of_event_ids = []
+    for each in x:
+        array_of_event_ids.append(each.event.id)
+    events = [Events.objects.get(id = id) for id in array_of_event_ids]
+    array_of_event_ids.clear()
+    return JsonResponse(EventsSerializer(events, many=True).data, status=status.HTTP_200_OK, safe=False)

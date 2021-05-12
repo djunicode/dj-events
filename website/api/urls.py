@@ -150,4 +150,5 @@ urlpatterns = [
         views.listNonCoreCommittee,
         name="non_corecom_list",
     ),
+    path("get_liked_events/<int:student_id>/", views.get_liked_events_for_a_user, name="liked_events_by_user")
 ]
