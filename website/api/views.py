@@ -354,10 +354,10 @@ def committee_login(request):
 # Liking of an Event
 @api_view(["POST"])
 @permission_classes([IsAuthenticated, IsStudent, ForEventLikeDislike])
-def event_like(request, pk1):
+def event_like(request, pk1, pk2):
     if request.method == "POST":
         try:
-            student = Students.objects.get(user=request.user)
+            student = Students.objects.get(user__id=pk2)
             event = Events.objects.get(id=pk1)
             liked = EventLikes.objects.filter(student=student, event=event)
             if liked:
@@ -383,11 +383,11 @@ def event_like(request, pk1):
 # Dis-Liking of an Event
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated, IsStudent, ForEventLikeDislike])
-def event_dislike(request, pk1):
+def event_dislike(request, pk1, pk2):
     if request.method == "DELETE":
         try:
             eventlike = EventLikes.objects.filter(
-                event__id=pk1, student__user=request.user
+                event__id=pk1, student__user__id=pk2
             )
             if eventlike:
                 eventlike.delete()

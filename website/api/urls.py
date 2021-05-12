@@ -37,12 +37,12 @@ urlpatterns = [
     ),
     # event like dislike
     path(
-        "event_like/<int:pk1>/",
+        "event_like/<int:pk1>/<int:pk2>/",
         views.event_like,
         name="event_like",
     ),
     path(
-        "event_dislike/<int:pk1>/",
+        "event_dislike/<int:pk1>/<int:pk2>/",
         views.event_dislike,
         name="event_dislike",
     ),
