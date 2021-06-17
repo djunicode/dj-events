@@ -4,6 +4,9 @@ import CommitteePage from "./pages/CommiteePage/CommitteePage";
 import DetailEvent from "./pages/DetailPage/DetailEvent";
 import Login from "./pages/Login/Login";
 import MembersList from "./pages/Members/MembersList";
+import EventsList from "./pages/EventsPage/EventsList";
+import EventCreate from "./pages/EventCreatePage/EventCreate";
+import ReferralCountList from "./pages/ReferralCountPage/ReferralCountList";
 import {
   BrowserRouter as Router,
   Switch,
@@ -62,6 +65,15 @@ function App() {
           <Route path="/" exact component={Home} />
           <PrivateRoute path="/members">
             <MembersList />
+          </PrivateRoute>
+          <PrivateRoute path="/events">
+            <EventsList />
+          </PrivateRoute>
+          <PrivateRoute path="/eventcreate">
+            <EventCreate />
+          </PrivateRoute>
+          <PrivateRoute path="/eventreferralcount/:id">
+            <ReferralCountList/>
           </PrivateRoute>
         </Switch>
       </div>
