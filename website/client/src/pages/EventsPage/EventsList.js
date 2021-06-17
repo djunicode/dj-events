@@ -26,13 +26,16 @@ class EventList extends React.Component {
     }
     render() {
       return (
-        <div className='container'>
-            <br></br><br></br>
-            <EventsMembersHeader/>
-            <div className='row'>
-            <AddCard/>
-            {this.state.events.map((event)=><EventCard event = {event}/>)}
+        <div  style={{background:'#1C2E4A'}}>
+            <div className='container'>
+                <br></br><br></br>
+                <EventsMembersHeader/>
+                <div className='row'>
+                <AddCard/>
+                {this.state.events.map((event)=><EventCard event = {event}/>)}
+                </div>
             </div>
+            <br></br><br></br>
         </div>
       );
     }

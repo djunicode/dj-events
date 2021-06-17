@@ -27,16 +27,18 @@ class ReferralCountList extends React.Component{
     render() {
         console.log(window.location.pathname.split('/')[2])
         return (
-            <div>
+            <div style={{background:'#1C2E4A'}}>
                 <br></br><br></br>
                 <EventsReferralCountHeader/>
-                <h4>Referral Count</h4>
-                <div className='container'>
+                <h4 style={{color:'white'}}>Referral Counts</h4><br></br>
+                <div className='container' style={{background:'#4E586E',borderRadius:'28.3946px',boxShadow:'0px 5.67892px 5.67892px rgba(0, 0, 0, 0.25)'}}>
+                    <br></br>
                     <div className='row'>
                     {this.state.referrals.map((referral,index)=><ReferralCard key={index} referral = {referral}/>)}
                     </div>
+                    <br></br>
                 </div>
-
+                <br></br><br></br>
             </div>
         );
     }

@@ -23,13 +23,13 @@ class EventCard extends React.Component{
       const classes = useStyles;
       return (
         <div className='col-sm-3' >
-            <Card className={classes.root} style={{display:'block',height:'240px',overflow:'hidden'}}>
+            <Card className={classes.root} style={{display:'block',height:'240px',overflow:'hidden',background:'#4E586E',borderRadius:'15px'}}>
               <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h5">
-                        <AddCircleIcon style={{fontSize:'60px',}}/>
+                        <AddCircleIcon style={{fontSize:'60px',borderRadius:'50%',background:'white'}}/>
                     </Typography>
-                    <Typography gutterBottom variant="h5" component="p">
+                    <Typography gutterBottom variant="h5" component="p" style={{color:'white'}}>
                     CREATE<br></br>AN<br></br>EVENT
                     </Typography>
                 </CardContent>

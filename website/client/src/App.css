@@ -66,3 +66,21 @@ button.rec-dot:hover, button.rec-dot:active, button.rec-dot:focus  {
 div .sc-iBPRYJ.bkVSTc.rec.rec-pagination{
   display: hidden;
 }
+
+.eventinput{
+  color:'white';
+  background:rgba(255, 255, 255, 0.35);
+  border-radius:3.52781px 3.52781px 0px 0px;
+}
+
+.eventinput::placeholder {
+  color: '#fff';
+}
+
+.referralcard:nth-child(3n+1){
+  border-right: 1px solid white;
+}
+
+.referralcard:nth-child(3n){
+  border-left: 1px solid white;
+}

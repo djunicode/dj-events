@@ -17,8 +17,8 @@ class EventsReferralCountHeader extends React.Component{
         return (
             <div>
                 <div className={classes.root}>
-                    <Button size="large" href="#">Events</Button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button size="large" href="#">Referral Count</Button>
+                    <Button size="large" href="#"><h5 style={{color:'white',fontWeight:'bold'}}>Events</h5></Button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button size="large" href="#"><h5 style={{color:'white',fontWeight:'bold'}}>Referral Count</h5></Button>
                 </div>
                 <br></br><br></br>
             </div>
