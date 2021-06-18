@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background: #1c2e4a;
 }
 
 .App-logo {
@@ -27,7 +28,7 @@
 .App-link {
   color: #61dafb;
 }
-.alignhead{
+.alignhead {
   text-align: center;
   color: #fff;
   font-family: Open Sans;
@@ -42,45 +43,47 @@
   }
 }
 
-
-.mainCard{
+.mainCard {
   width: 80%;
-  margin:50px auto ;
+  margin: 50px auto;
   display: block;
 }
 
-button.rec-dot{
+button.rec-dot {
   box-shadow: 0 0 1px 3px rgba(255, 255, 255, 0.5);
   /* background-color: #ffffff; */
 }
 
-button.rec-dot:hover, button.rec-dot:active, button.rec-dot:focus  {
+button.rec-dot:hover,
+button.rec-dot:active,
+button.rec-dot:focus {
   box-shadow: 0 0 1px 3px rgba(255, 255, 255, 0.5);
   background-color: #ffffff;
 }
-.lgksPe:hover:enabled, .lgksPe:focus:enabled{
-  background-color: #4E586E;
+.lgksPe:hover:enabled,
+.lgksPe:focus:enabled {
+  background-color: #4e586e;
   color: #fff;
 }
 
-div .sc-iBPRYJ.bkVSTc.rec.rec-pagination{
+div .sc-iBPRYJ.bkVSTc.rec.rec-pagination {
   display: hidden;
 }
 
-.eventinput{
-  color:'white';
-  background:rgba(255, 255, 255, 0.35);
-  border-radius:3.52781px 3.52781px 0px 0px;
+.eventinput {
+  color: "white";
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 3.52781px 3.52781px 0px 0px;
 }
 
 .eventinput::placeholder {
-  color: '#fff';
+  color: "#fff";
 }
 
-.referralcard:nth-child(3n+1){
+.referralcard:nth-child(3n + 1) {
   border-right: 1px solid white;
 }
 
-.referralcard:nth-child(3n){
+.referralcard:nth-child(3n) {
   border-left: 1px solid white;
 }

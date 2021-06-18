@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     margin: "5%",
+    color: "white",
   },
   avatar: {
     marginRight: "2%",
@@ -100,7 +101,6 @@ const AddCo = () => {
                   id={x.id}
                   first_name={x.first_name}
                   last_name={x.last_name}
-                  isCo={1}
                   isCore={0}
                 />
               </div>

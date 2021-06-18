@@ -21,7 +21,6 @@ const Core = () => {
       .then((response) => setCo(response.data))
       .catch((err) => console.error(err));
   }, [co]);
-
   return (
     <div>
       {co.map((x) => (

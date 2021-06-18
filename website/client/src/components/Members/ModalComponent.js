@@ -11,6 +11,7 @@ import TextField from "@material-ui/core/TextField";
 const useStyles = makeStyles((theme) => ({
   btn: {
     margin: "5%",
+    color: "white",
   },
   modal: {
     display: "flex",
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginRight: "2%",
-    marginTop: "2px",
+    marginTop: "5px",
   },
   colour: {
     backgroundColor: "green",
@@ -83,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ModalComponent = (username) => {
   const classes = useStyles();
+  var token = localStorage.getItem("Token");
   const [open, setOpen] = useState(false);
   const [designation, setDesignation] = useState("");
 
@@ -92,6 +94,38 @@ const ModalComponent = (username) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const addCore = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Token ${token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    var url = `http://aryan123456.pythonanywhere.com/api/upgrade_to_core/${username.id}/${designation}/`;
+    fetch(url, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  const addCo = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Token ${token}`);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    var url = `http://aryan123456.pythonanywhere.com/api/upgrade_to_co/${username.id}/${designation}/`;
+    fetch(url, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   };
 
   return (
@@ -146,6 +180,7 @@ const ModalComponent = (username) => {
               <Button
                 variant="contained"
                 color="secondary"
+                onClick={username.isCore === 1 ? addCore : addCo}
                 className={classes.done}
               >
                 Done

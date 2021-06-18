@@ -10,14 +10,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   memberlist: {
-    marginTop: "1%",
-  },
-  border: {
-    borderRight: "2px solid black",
+    marginTop: "2%",
+    color: "white",
   },
   add: {
     backgroundColour: "#FFFFFF",
     borderRadius: "27.5px",
+    color: "#1C2E4A",
   },
   icon: {
     colour: "#F54B64",

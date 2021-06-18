@@ -1,12 +1,11 @@
 import React from "react";
 import Home from "./pages/HomePage/Home";
-import CommitteePage from "./pages/CommiteePage/CommitteePage";
-import DetailEvent from "./pages/DetailPage/DetailEvent";
 import Login from "./pages/Login/Login";
 import MembersList from "./pages/Members/MembersList";
 import EventsList from "./pages/EventsPage/EventsList";
 import EventCreate from "./pages/EventCreatePage/EventCreate";
 import ReferralCountList from "./pages/ReferralCountPage/ReferralCountList";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -73,7 +72,7 @@ function App() {
             <EventCreate />
           </PrivateRoute>
           <PrivateRoute path="/eventreferralcount/:id">
-            <ReferralCountList/>
+            <ReferralCountList />
           </PrivateRoute>
         </Switch>
       </div>

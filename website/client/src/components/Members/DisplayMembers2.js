@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     margin: "5%",
+    color: "white",
   },
   avatar: {
     marginRight: "2%",
@@ -29,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
   part1: {
     display: "flex",
     flexDirection: "row",
-    textAlign: "center",
   },
   part2: {
     float: "right",
@@ -75,7 +75,7 @@ const DisplayMembers2 = ({ id, name, positionAssigned }) => {
             <div>
               <span className={classes.name}>{name}</span>
               <br />
-              <span className={classes.position}>60004190126</span>
+              <span className={classes.position}>{positionAssigned}</span>
             </div>
           </div>
         </Grid>

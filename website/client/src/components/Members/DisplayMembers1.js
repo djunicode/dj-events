@@ -18,9 +18,11 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "normal",
     lineHeight: "19.14px",
     fontSize: "16.34px",
+    marginLeft: "0px",
   },
   btn: {
     margin: "5%",
+    color: "white",
   },
   avatar: {
     marginRight: "2%",
@@ -75,7 +77,7 @@ const DisplayMembers1 = ({ id, name, positionAssigned }) => {
             <div>
               <span className={classes.name}>{name}</span>
               <br />
-              <span className={classes.position}>60004190126</span>
+              <span className={classes.position}>{positionAssigned}</span>
             </div>
           </div>
         </Grid>

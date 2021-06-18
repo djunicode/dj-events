@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles } from "@material-ui/core/styles";
+import ModalComponent from "../../components/Members/ModalComponent";
 
 const useStyles = makeStyles((theme) => ({
   name: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     margin: "5%",
+    color: "white",
   },
   avatar: {
     marginRight: "2%",
@@ -40,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddCo = () => {
+const AddCore = () => {
   const classes = useStyles();
   const [students, setStudents] = useState([]);
   var id = localStorage.getItem("id");
@@ -83,13 +85,13 @@ const AddCo = () => {
             </Grid>
             <Grid item xs={3}>
               <div className={classes.part2}>
-                <Button
-                  variant="outlined"
-                  //onClick={removeCore}
-                  className={classes.btn}
-                >
-                  Add
-                </Button>
+                <ModalComponent
+                  username={x.username}
+                  id={x.id}
+                  first_name={x.first_name}
+                  last_name={x.last_name}
+                  isCore={1}
+                />
               </div>
             </Grid>
           </Grid>
@@ -99,4 +101,4 @@ const AddCo = () => {
   );
 };
 
-export default AddCo;
+export default AddCore;
