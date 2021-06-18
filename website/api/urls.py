@@ -1,5 +1,5 @@
 from django.urls import path
-from api import views
+from . import views
 from django.conf.urls import include
 
 
@@ -111,7 +111,7 @@ urlpatterns = [
     ),
     path(
         "delete_co_committee_member/<int:pk>/",
-        views.CoCommittee,
+        views.deleteCoCommittee,
         name="delete-co-committee-members",
     ),
     path(

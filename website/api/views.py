@@ -683,7 +683,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 @permission_classes([IsAuthenticated])
 def upgradeToCoreCom(request, pk, position):
     try:
-        committee = Committee.objects.get(User=request.user)
+        committee = Committee.objects.get(user=request.user)
         to_be_upgraded = Students.objects.get(id=pk)
 
         if CoreCommittee.objects.filter(
@@ -909,7 +909,7 @@ def deleteCoCommittee(request, pk):
         committee = Committee.objects.get(user=request.user)
         x = CoCommittee.objects.get(id=pk)
         if x.committee == committee:
-            CoCommittee.objects.get(id=pk).delete()
+            x.delete()
         else:
             return JsonResponse(
                 data={
