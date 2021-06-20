@@ -7,16 +7,22 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import { makeStyles } from "@material-ui/core/styles";
+import Navbar from "../../components/Navbar/Navbar";
+import LoggedHeader from "../../components/LoggedHeader/LoggedHeader";
+import EventsMembersHeader from "../../components/EventsMembersHeader/EventsMembersHeader";
 
 const useStyles = makeStyles((theme) => ({
   memberlist: {
-    marginTop: "2%",
     color: "white",
+    overflowX: "hidden",
+    height: "90vh",
   },
   add: {
     backgroundColour: "#FFFFFF",
     borderRadius: "27.5px",
     color: "#1C2E4A",
+    marginBottom: "20px",
+    marginTop: "-30px",
   },
   icon: {
     colour: "#F54B64",
@@ -46,6 +52,10 @@ const MembersList = () => {
   const classes = useStyles();
   return (
     <div className={classes.memberlist}>
+      <Navbar />
+      <LoggedHeader />
+      <br />
+      <EventsMembersHeader />
       <Grid container spacing={3}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
@@ -102,6 +112,12 @@ const MembersList = () => {
         </Grid>
         <Grid item xs={1}></Grid>
       </Grid>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 };

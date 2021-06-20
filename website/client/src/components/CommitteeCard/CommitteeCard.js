@@ -13,11 +13,15 @@ const CommitteeCard = ({ id, name }) => {
   return (
     <div>
       <MDBCard className="myCard">
-        {/*<MDBCardImage src='https://mdbootstrap.com/img/new/standard/nature/184.jpg' position='top' alt='...' />*/}
+        <MDBCardImage
+          src="https://wallpapercave.com/wp/wp2587127.jpg"
+          position="top"
+          alt="..."
+        />
         <MDBCardBody className="bgcolor">
           <span>
             <MDBCardTitle>{name}</MDBCardTitle>
-            <MDBCardLink style={{ color: "#F54B64" }} href="#">
+            <MDBCardLink style={{ color: "#F54B64" }} href={"/committee/" + id}>
               KNOW MORE
             </MDBCardLink>
           </span>

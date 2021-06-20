@@ -14,9 +14,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500px",
     fontStyle: "normal",
     lineHeight: "35px",
-    fontSize: "36px",
     color: "white",
-    marginTop: "30px",
+    marginTop: "50px",
   },
   left: {
     marginLeft: "-20%",
@@ -28,7 +27,6 @@ export default function LoggedHeader() {
   const classes = useStyles();
   var CommitteeName = localStorage.getItem("CommitteeName");
   var CommitteeDepartment = localStorage.getItem("CommitteeDepartment");
-  var ChairPerson = localStorage.getItem("CommitteeName");
   return (
     <div className={classes.root}>
       <div className={classes.left}>
@@ -40,9 +38,8 @@ export default function LoggedHeader() {
         />
       </div>
       <div className={classes.right}>
-        <div>{CommitteeName}</div>
-        <div>{CommitteeDepartment}</div>
-        <div>{ChairPerson}</div>
+        <div style={{ fontSize: "34px" }}>{CommitteeName}</div>
+        <div style={{ fontSize: "25px" }}>{CommitteeDepartment}</div>
       </div>
     </div>
   );

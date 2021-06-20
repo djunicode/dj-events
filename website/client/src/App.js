@@ -5,6 +5,8 @@ import MembersList from "./pages/Members/MembersList";
 import EventsList from "./pages/EventsPage/EventsList";
 import EventCreate from "./pages/EventCreatePage/EventCreate";
 import ReferralCountList from "./pages/ReferralCountPage/ReferralCountList";
+import CommitteePage from "./pages/CommiteePage/CommitteePage";
+import DetailEvent from "./pages/DetailPage/DetailEvent";
 
 import {
   BrowserRouter as Router,
@@ -62,6 +64,8 @@ function App() {
             <Login />
           </SignedInRoute>
           <Route path="/" exact component={Home} />
+          <Route path="/committee/:id" exact component={CommitteePage} />
+          <Route path="/event/:id" exact component={DetailEvent} />
           <PrivateRoute path="/members">
             <MembersList />
           </PrivateRoute>

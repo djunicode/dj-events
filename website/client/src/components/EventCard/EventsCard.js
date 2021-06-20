@@ -13,7 +13,11 @@ const CustomCard = ({ id, name, summary, committeeName }) => {
   return (
     <div>
       <MDBCard className="myCard">
-        {/*<MDBCardImage src='https://mdbootstrap.com/img/new/standard/nature/184.jpg' position='top' alt='...' />*/}
+        <MDBCardImage
+          src="https://wallpapercave.com/wp/wp2587127.jpg"
+          position="top"
+          alt="..."
+        />
         <MDBCardBody className="bgcolor">
           <MDBCardTitle>{name}</MDBCardTitle>
           <MDBCardText>{summary}</MDBCardText>
@@ -25,7 +29,7 @@ const CustomCard = ({ id, name, summary, committeeName }) => {
           >
             {committeeName}
           </MDBCardLink>
-          <MDBCardLink style={{ color: "#F54B64" }} href="#">
+          <MDBCardLink style={{ color: "#F54B64" }} href={"/event/" + id}>
             KNOW MORE
           </MDBCardLink>
         </MDBCardBody>

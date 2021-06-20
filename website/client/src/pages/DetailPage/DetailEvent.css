@@ -1,62 +1,68 @@
-.title_name{
+.title_name {
   display: inline-block;
   color: #fff;
   text-align: center;
-  margin-left: 550px;
+  margin-left: -100px;
 }
-.imageholder{
-  margin-left: 450px;
+.imageholder {
+  /* margin-left: 450px; */
   margin-top: 20px;
 }
-.header{
+.header {
   display: inline-block;
   text-align: center;
 }
-.icon{
+.icon {
   display: inline-block;
   color: #fff;
   margin-top: -45px;
-  margin-left: 50px;
+  margin-left: -1100px;
 }
-.left-orient{
+.left-orient {
   text-align: left;
   margin: 50px 200px;
 }
-.verticaline{
-  border-left: thick solid #ff0000;
+.verticaline {
+  border-left: thick solid #fff;
   /* margin-right: 50px; */
   margin-top: 20px;
 }
-.verticaline p{
+.verticaline p {
   margin-left: 30px;
   color: #fff;
   margin-top: 20px;
 }
-.inner_title{
+.inner_title {
   margin-left: -670px;
 }
-.inner_title2{
+.inner_title2 {
+  margin-top: 50px;
+  /* margin-left: 190px; */
+}
+/* .inner_title3{
   margin-top: 50px;
   margin-left: 190px;
-}
-.link{
+} */
+.link {
   color: #fff;
-  margin-left: 190px;
+  margin-left: -890px;
+  margin-top: 20px;
 }
-.contacticon{
+.contacticon {
   color: #fff;
   margin-right: 10px;
+  margin-top: -5px;
 }
-.contact{
+.contact {
   color: #fff;
   display: inline-block;
 }
-.contact2{
+.contact2 {
   color: #fff;
   display: inline-block;
-  margin-left: 150px;
+  /* margin-left: 150px; */
 }
-.contact_details{
-  margin-left: 185px;
+.contact_details {
+  margin-left: -700px;
   margin-top: 30px;
 }

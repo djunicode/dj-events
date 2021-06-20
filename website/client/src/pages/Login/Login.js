@@ -13,6 +13,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import clsx from "clsx";
+import Navbar from "../../components/Navbar/Navbar";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 
@@ -22,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "center",
     textAlign: "center",
-    height: "600px",
+    height: "89.7vh",
+    overflowY: "hidden",
   },
   form: {
     width: "40%",
@@ -39,8 +41,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "linear-gradient(62.97deg, #F54B64 29.17%, #F78361 100%)",
     borderRadius: "12.1309px",
   },
+  root: {
+    "& .MuiInputBase-root.Mui-disabled": {
+      color: "rgba(0, 0, 0, 1)",
+    },
+    "& .MuiFormLabel-root.Mui-disabled": {
+      color: "rgba(0, 0, 0, 1 )",
+    },
+  },
   input: {
     color: "white",
+  },
+  field: {
+    color: "#fff",
   },
   forgotpwd: {
     color: "white",
@@ -117,14 +130,21 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Navbar />
       <div className={classes.root}>
         <div className={classes.Login}>
           <form className={classes.form}>
             <h1>Welcome Back!</h1>
             {msg === "" ? "" : <div style={{ color: "red" }}>{msg}</div>}
             <TextField
+              className={classes.field}
               variant="filled"
               color="secondary"
+              style={{
+                background: "#4E586E",
+                borderRadius: "15.4909px",
+                color: "#fff",
+              }}
               margin="normal"
               required
               fullWidth
@@ -136,6 +156,7 @@ export default function Login() {
               autoFocus
               InputProps={{
                 className: classes.input,
+                input: classes.field,
               }}
             />
             <FormControl
@@ -147,6 +168,11 @@ export default function Login() {
                 Password
               </InputLabel>
               <FilledInput
+                style={{
+                  background: "#4E586E",
+                  borderRadius: "15.4909px",
+                  color: "#fff",
+                }}
                 id="filled-adornment-password"
                 InputProps={{ className: classes.input }}
                 type={values.showPassword ? "text" : "password"}
@@ -173,7 +199,11 @@ export default function Login() {
             <Button
               fullWidth
               variant="contained"
-              color="primary"
+              style={{
+                background:
+                  "linear-gradient(62.97deg, #F54B64 29.17%, #F78361 100%)",
+              }}
+              // color="linear-gradient(62.97deg, #F54B64 29.17%, #F78361 100%)"
               onClick={signIn}
               className={classes.submit}
             >

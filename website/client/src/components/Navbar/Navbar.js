@@ -10,6 +10,15 @@ import {
 import "./Navbar.css";
 
 const Navbar = () => {
+  const logoutHandler = () => {
+    localStorage.removeItem("CommitteeDepartment");
+    localStorage.removeItem("Token");
+    localStorage.removeItem("logged");
+    localStorage.removeItem("CommitteeName");
+    localStorage.removeItem("id");
+    window.location.reload();
+  };
+
   return (
     <header classname="mask">
       <MDBNavbar
@@ -35,7 +44,7 @@ const Navbar = () => {
                 <MDBNavbarLink
                   className=" spacingnav"
                   aria-current="page"
-                  href="#"
+                  href="/"
                 >
                   <h3>Events</h3>
                 </MDBNavbarLink>
@@ -46,9 +55,18 @@ const Navbar = () => {
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink className=" spacingnav" href="#">
-                  <h3>Login</h3>
-                </MDBNavbarLink>
+                {localStorage.getItem("logged") ? (
+                  <MDBNavbarLink
+                    className=" spacingnav"
+                    onClick={logoutHandler}
+                  >
+                    <h3>Logout</h3>
+                  </MDBNavbarLink>
+                ) : (
+                  <MDBNavbarLink className=" spacingnav" href="/login">
+                    <h3>Login</h3>
+                  </MDBNavbarLink>
+                )}
               </MDBNavbarItem>
               {/* <MDBNavbarItem>
                 <MDBNavbarLink href='#'>About</MDBNavbarLink>
