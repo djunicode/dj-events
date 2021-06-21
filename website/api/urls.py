@@ -150,5 +150,9 @@ urlpatterns = [
         views.listNonCoreCommittee,
         name="non_corecom_list",
     ),
-    path("get_liked_events/<int:student_id>/", views.get_liked_events_for_a_user, name="liked_events_by_user")
+    path("get_liked_events/<int:student_id>/", views.get_liked_events_for_a_user, name="liked_events_by_user"),
+    path("get_followers/<int:committee_id>/", views.get_followers_for_committee, name='follower_count' ),
+    path("committee_logout/", views.committee_logout, name="committee-logout"),
+    path("student_logout/", views.student_logout, name="student-logout"),
+    path("sort_events_by_date/", views.event_sorter, name="sorter"),
 ]

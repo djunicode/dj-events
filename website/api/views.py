@@ -3,7 +3,7 @@ from rest_framework import generics, status, mixins, permissions
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, auth
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import (
@@ -42,6 +42,7 @@ from .models import (
     EventLikes,
     CoCommitteeTasks,
     CoreCommittee,
+    CommitteeToSubscribers,
 )
 from .permissions import (
     ForEventsCreate,
@@ -1226,3 +1227,36 @@ def get_liked_events_for_a_user(request, student_id):
     events = [Events.objects.get(id = id) for id in array_of_event_ids]
     array_of_event_ids.clear()
     return JsonResponse(EventsSerializer(events, many=True).data, status=status.HTTP_200_OK, safe=False)
+
+@api_view(["GET"])
+def get_followers_for_committee(request, committee_id):
+    followers = CommitteeToSubscribers.objects.filter(committee=Committee.objects.get(id=committee_id))
+    return JsonResponse(
+        {"follower_count" : len(followers)}, status=status.HTTP_200_OK
+    )
+
+#Committee Logout
+@permission_classes([IsAuthenticated, IsCommittee])
+def committee_logout(request):
+    x = f"{request.user} was logged out"
+    committee = Committee.objects.get(username=request.user)
+    committee.auth_token.delete()
+    return JsonResponse(
+        {"Message" : x}, status=status.HTTP_200_OK
+    )
+
+#Student Logout
+@permission_classes([IsAuthenticated, IsStudent])
+def student_logout(request):
+    x = f"{request.user} was logged out"
+    student = Students.objects.get(username=request.user)
+    student.auth_token.delete()
+    return JsonResponse(
+        {"Message" : x}, status=status.HTTP_200_OK
+    )
+
+@api_view(["GET"])
+#sorts events by date and if two events fall on the same date then the are sorted according to their time.
+def event_sorter(request):
+    all_events = Events.objects.order_by('-eventDate', 'eventTime')
+    return JsonResponse(EventsSerializer(all_events, many=True).data, status=status.HTTP_200_OK, safe=False)
