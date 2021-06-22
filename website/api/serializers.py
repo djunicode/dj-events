@@ -93,12 +93,14 @@ class CoCommitteeSerializer(serializers.ModelSerializer):
     referrals = CoCommitteeReferalsSerializer(many=True)
     tasks = CoCommitteeTasksSerializer(many=True)
     committee = serializers.StringRelatedField()
+    committee_id = serializers.CharField(source="committee.id")
     student = serializers.CharField(source="student.get_full_name")
 
     class Meta:
         model = CoCommittee
         fields = [
             "id",
+            "committee_id"
             "student",
             "committee",
             "positionAssigned",
@@ -130,6 +132,7 @@ class CommitteeSerializer(serializers.ModelSerializer):
             "committeeDescription",
             "committeeDept",
             "committeeChairperson",
+            "followers"
         ]
 
 

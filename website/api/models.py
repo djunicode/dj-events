@@ -50,6 +50,10 @@ class Committee(User):
     def otp_generator(self):
         self.otp=random.randint(1000,9999)
         self.save()
+    
+    @property
+    def followers(self):
+        return self.committeetosubscribers_set.all().count()
 
 
 # ----------------------------------------------------------------------------------------
