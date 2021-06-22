@@ -26,9 +26,8 @@ SECRET_KEY = "^^b*1o2a15ybg^91w_%8hse-iyix9_tx==$j$dii(a-q&7(d0%"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-if DEBUG:
-    ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['aryan123456.pythonanywhere.com']
+
 
 # Application definition
 
@@ -142,17 +141,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
-
+STATIC_ROOT = BASE_DIR / "static"
 # AUTH_USER_MODEL = "api.Students"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "client/build",
-    BASE_DIR / "client/build/static",
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "client/build",
+#     BASE_DIR / "client/build/static",
+# ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.TokenAuthentication"
     ],
 }
 

@@ -43,6 +43,7 @@ class EventsSerializer(serializers.ModelSerializer):
 
 class CoreCommitteeSerializer(serializers.ModelSerializer):
     committee = serializers.StringRelatedField()
+    committee_id = serializers.CharField(source="committee.id")
     student = serializers.CharField(source="student.get_full_name")
 
     class Meta:
@@ -50,6 +51,7 @@ class CoreCommitteeSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "student",
+            "committee_id",
             "committee",
             "positionAssigned",
         ]
@@ -100,7 +102,7 @@ class CoCommitteeSerializer(serializers.ModelSerializer):
         model = CoCommittee
         fields = [
             "id",
-            "committee_id"
+            "committee_id",
             "student",
             "committee",
             "positionAssigned",
