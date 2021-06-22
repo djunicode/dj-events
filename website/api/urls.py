@@ -155,4 +155,7 @@ urlpatterns = [
     path("committee_logout/", views.committee_logout, name="committee-logout"),
     path("student_logout/", views.student_logout, name="student-logout"),
     path("sort_events_by_date/", views.event_sorter, name="sorter"),
+    path("follow/<int:student_id>/<int:committee_id>/", views.follow_committee, name="follow"),
+    path("unfollow/<int:student_id>/<int:committee_id>/", views.unfollow_committee, name="unfollow"),
+    path("sort_by_creation_time/", views.creation_time_sorter, name="creation_time"),
 ]

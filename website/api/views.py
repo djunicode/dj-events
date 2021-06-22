@@ -1242,7 +1242,7 @@ def committee_logout(request):
     committee = Committee.objects.get(username=request.user)
     committee.auth_token.delete()
     return JsonResponse(
-        {"Message" : x}, status=status.HTTP_200_OK
+        {"Message" : x, "id": -1}, status=status.HTTP_200_OK
     )
 
 #Student Logout
@@ -1252,7 +1252,7 @@ def student_logout(request):
     student = Students.objects.get(username=request.user)
     student.auth_token.delete()
     return JsonResponse(
-        {"Message" : x}, status=status.HTTP_200_OK
+        {"Message" : x, "id": -1}, status=status.HTTP_200_OK
     )
 
 @api_view(["GET"])
@@ -1260,3 +1260,48 @@ def student_logout(request):
 def event_sorter(request):
     all_events = Events.objects.order_by('-eventDate', 'eventTime')
     return JsonResponse(EventsSerializer(all_events, many=True).data, status=status.HTTP_200_OK, safe=False)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsStudent])
+def follow_committee(request, student_id, committee_id):
+    if request.user.id == student_id:
+        committee = Committee.objects.get(id=committee_id)
+        student = Students.objects.get(id=student_id)
+        if CommitteeToSubscribers.objects.filter(subscribers=student, committee=committee).exists():
+            return JsonResponse(
+            {"Message" : f"{student.username} is already a follower"}, safe=True, status=status.HTTP_200_OK
+        )
+        CommitteeToSubscribers.objects.create(subscribers=student, committee=committee)
+        return JsonResponse(
+            {"Message" : f"followed {committee.username}"}, safe=True, status=status.HTTP_200_OK
+        )
+    else:
+        return JsonResponse(
+        {"Message" : f"unauthorized"}, safe=True, status=status.HTTP_401_UNAUTHORIZED
+    )
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsStudent])
+def unfollow_committee(request, student_id, committee_id):
+    if request.user.id == student_id:
+        committee = Committee.objects.get(id=committee_id)
+        student = Students.objects.get(id=student_id)
+        if not CommitteeToSubscribers.objects.filter(subscribers=student, committee=committee):
+            return JsonResponse(
+            {"Message" : f"{student.username} is not a follwer"}, safe=True, status=status.HTTP_200_OK
+        )
+        CommitteeToSubscribers.objects.get(subscribers=student, committee=committee).delete()
+        return JsonResponse(
+            {"Message" : f"unfollowed {committee.username}"}, safe=True, status=status.HTTP_200_OK
+        )
+    else:
+        return JsonResponse(
+        {"Message" : f"unauthorized"}, safe=True, status=status.HTTP_401_UNAUTHORIZED
+    )
+
+@api_view(['GET'])
+def creation_time_sorter(request):
+    events = Events.objects.order_by("-id")
+    event_list = EventsSerializer(events, many=True).data
+    return JsonResponse(event_list, status=status.HTTP_200_OK, safe=False)
