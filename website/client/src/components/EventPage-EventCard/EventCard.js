@@ -22,6 +22,7 @@ class EventCard extends React.Component{
       const classes = useStyles;
       return (
         <div className='col-sm-3' style={{}}>
+          <a href={"/eventedit/"+this.props.event.id} style={{ textDecoration: "none" }}>
             <Card className={classes.root} style={{display:'block',height:'240px',overflow:'hidden',background:'#4E586E',borderRadius:'15px'}}>
               <CardActionArea>
                 <CardMedia
@@ -47,6 +48,7 @@ class EventCard extends React.Component{
                 </CardContent>
               </CardActionArea>
             </Card>
+            </a>
             <br></br>
         </div>
       );

@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import MembersList from "./pages/Members/MembersList";
 import EventsList from "./pages/EventsPage/EventsList";
 import EventCreate from "./pages/EventCreatePage/EventCreate";
+import EventEdit from "./pages/EventEditPage/EventEdit";
 import ReferralCountList from "./pages/ReferralCountPage/ReferralCountList";
 import CommitteePage from "./pages/CommiteePage/CommitteePage";
 import DetailEvent from "./pages/DetailPage/DetailEvent";
@@ -77,6 +78,9 @@ function App() {
           </PrivateRoute>
           <PrivateRoute path="/eventreferralcount/:id">
             <ReferralCountList />
+          </PrivateRoute>
+          <PrivateRoute path="/eventedit/:id">
+            <EventEdit />
           </PrivateRoute>
         </Switch>
       </div>

@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 class EventsReferralCountHeader extends React.Component {
   render() {
+    var event_id = window.location.pathname.split("/")[2];
     const classes = useStyles;
     return (
       <div>
@@ -20,7 +21,7 @@ class EventsReferralCountHeader extends React.Component {
             <h5 style={{ color: "white", fontWeight: "bold" }}>Events</h5>
           </Button>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <Button size="large" href="#">
+          <Button size="large" href={"/eventreferralcount/"+event_id}>
             <h5 style={{ color: "white", fontWeight: "bold" }}>
               Referral Count
             </h5>
