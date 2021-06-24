@@ -158,4 +158,6 @@ urlpatterns = [
     path("follow/<int:student_id>/<int:committee_id>/", views.follow_committee, name="follow"),
     path("unfollow/<int:student_id>/<int:committee_id>/", views.unfollow_committee, name="unfollow"),
     path("sort_by_creation_time/", views.creation_time_sorter, name="creation_time"),
+    path("get_followed_committees/<int:student_id>/", views.committees_followed, name="follwed_committees"),
+    path("get_events_for_followed_committees/<int:student_id>/", views.get_events_for_followed_committees, name="events_of_followed_committees"),
 ]

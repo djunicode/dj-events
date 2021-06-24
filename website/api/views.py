@@ -1305,3 +1305,30 @@ def creation_time_sorter(request):
     events = Events.objects.order_by("-id")
     event_list = EventsSerializer(events, many=True).data
     return JsonResponse(event_list, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['GET'])
+def committees_followed(request, student_id):
+    student = Students.objects.get(id=student_id)
+    committees_followed = CommitteeToSubscribers.objects.filter(subscribers=student)
+    array_of_followed_committees_ids = []
+    for each in committees_followed:
+        array_of_followed_committees_ids.append(each.committee.id)
+    committees  = [Committee.objects.get(id = id) for id in array_of_followed_committees_ids]
+    array_of_followed_committees_ids.clear()
+    return JsonResponse(CommitteeSerializer(committees, many=True).data, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['GET'])
+def get_events_for_followed_committees(request, student_id):
+    student = Students.objects.get(id=student_id)
+    committees_followed = CommitteeToSubscribers.objects.filter(subscribers=student)
+    array_of_followed_committees_ids = []
+    for each in committees_followed:
+        array_of_followed_committees_ids.append(each.committee.id)
+    committees  = [Committee.objects.get(id = id) for id in array_of_followed_committees_ids]
+    array_of_followed_committees_ids.clear()
+    events = []
+    for each in committees:
+        events.append(EventsSerializer(Events.objects.filter(organisingCommittee=each), many=True).data)
+    print(events)
+    return JsonResponse({"data":events}, status=status.HTTP_200_OK, safe=False)
+
