@@ -3,7 +3,7 @@ from rest_framework import generics, status, mixins, permissions
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, auth
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import (
@@ -42,6 +42,7 @@ from .models import (
     EventLikes,
     CoCommitteeTasks,
     CoreCommittee,
+    CommitteeToSubscribers,
 )
 from .permissions import (
     ForEventsCreate,
@@ -683,7 +684,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 @permission_classes([IsAuthenticated])
 def upgradeToCoreCom(request, pk, position):
     try:
-        committee = Committee.objects.get(User=request.user)
+        committee = Committee.objects.get(user=request.user)
         to_be_upgraded = Students.objects.get(id=pk)
 
         if CoreCommittee.objects.filter(
@@ -909,7 +910,7 @@ def deleteCoCommittee(request, pk):
         committee = Committee.objects.get(user=request.user)
         x = CoCommittee.objects.get(id=pk)
         if x.committee == committee:
-            CoCommittee.objects.get(id=pk).delete()
+            x.delete()
         else:
             return JsonResponse(
                 data={
@@ -1217,3 +1218,117 @@ def committee_search(request):
             return JsonResponse(
                 {"message": "No Committees Found"}, status=status.HTTP_200_OK
             )
+@api_view(["GET"])
+def get_liked_events_for_a_user(request, student_id):
+    x = EventLikes.objects.filter(student=student_id)
+    array_of_event_ids = []
+    for each in x:
+        array_of_event_ids.append(each.event.id)
+    events = [Events.objects.get(id = id) for id in array_of_event_ids]
+    array_of_event_ids.clear()
+    return JsonResponse(EventsSerializer(events, many=True).data, status=status.HTTP_200_OK, safe=False)
+
+@api_view(["GET"])
+def get_followers_for_committee(request, committee_id):
+    followers = CommitteeToSubscribers.objects.filter(committee=Committee.objects.get(id=committee_id))
+    return JsonResponse(
+        {"follower_count" : len(followers)}, status=status.HTTP_200_OK
+    )
+
+#Committee Logout
+@permission_classes([IsAuthenticated, IsCommittee])
+def committee_logout(request):
+    x = f"{request.user} was logged out"
+    committee = Committee.objects.get(username=request.user)
+    committee.auth_token.delete()
+    return JsonResponse(
+        {"Message" : x, "id": -1}, status=status.HTTP_200_OK
+    )
+
+#Student Logout
+@permission_classes([IsAuthenticated, IsStudent])
+def student_logout(request):
+    x = f"{request.user} was logged out"
+    student = Students.objects.get(username=request.user)
+    student.auth_token.delete()
+    return JsonResponse(
+        {"Message" : x, "id": -1}, status=status.HTTP_200_OK
+    )
+
+@api_view(["GET"])
+#sorts events by date and if two events fall on the same date then the are sorted according to their time.
+def event_sorter(request):
+    all_events = Events.objects.order_by('-eventDate', 'eventTime')
+    return JsonResponse(EventsSerializer(all_events, many=True).data, status=status.HTTP_200_OK, safe=False)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsStudent])
+def follow_committee(request, student_id, committee_id):
+    if request.user.id == student_id:
+        committee = Committee.objects.get(id=committee_id)
+        student = Students.objects.get(id=student_id)
+        if CommitteeToSubscribers.objects.filter(subscribers=student, committee=committee).exists():
+            return JsonResponse(
+            {"Message" : f"{student.username} is already a follower"}, safe=True, status=status.HTTP_200_OK
+        )
+        CommitteeToSubscribers.objects.create(subscribers=student, committee=committee)
+        return JsonResponse(
+            {"Message" : f"followed {committee.username}"}, safe=True, status=status.HTTP_200_OK
+        )
+    else:
+        return JsonResponse(
+        {"Message" : f"unauthorized"}, safe=True, status=status.HTTP_401_UNAUTHORIZED
+    )
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated, IsStudent])
+def unfollow_committee(request, student_id, committee_id):
+    if request.user.id == student_id:
+        committee = Committee.objects.get(id=committee_id)
+        student = Students.objects.get(id=student_id)
+        if not CommitteeToSubscribers.objects.filter(subscribers=student, committee=committee):
+            return JsonResponse(
+            {"Message" : f"{student.username} is not a follwer"}, safe=True, status=status.HTTP_200_OK
+        )
+        CommitteeToSubscribers.objects.get(subscribers=student, committee=committee).delete()
+        return JsonResponse(
+            {"Message" : f"unfollowed {committee.username}"}, safe=True, status=status.HTTP_200_OK
+        )
+    else:
+        return JsonResponse(
+        {"Message" : f"unauthorized"}, safe=True, status=status.HTTP_401_UNAUTHORIZED
+    )
+
+@api_view(['GET'])
+def creation_time_sorter(request):
+    events = Events.objects.order_by("-id")
+    event_list = EventsSerializer(events, many=True).data
+    return JsonResponse(event_list, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['GET'])
+def committees_followed(request, student_id):
+    student = Students.objects.get(id=student_id)
+    committees_followed = CommitteeToSubscribers.objects.filter(subscribers=student)
+    array_of_followed_committees_ids = []
+    for each in committees_followed:
+        array_of_followed_committees_ids.append(each.committee.id)
+    committees  = [Committee.objects.get(id = id) for id in array_of_followed_committees_ids]
+    array_of_followed_committees_ids.clear()
+    return JsonResponse(CommitteeSerializer(committees, many=True).data, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['GET'])
+def get_events_for_followed_committees(request, student_id):
+    student = Students.objects.get(id=student_id)
+    committees_followed = CommitteeToSubscribers.objects.filter(subscribers=student)
+    array_of_followed_committees_ids = []
+    for each in committees_followed:
+        array_of_followed_committees_ids.append(each.committee.id)
+    committees  = [Committee.objects.get(id = id) for id in array_of_followed_committees_ids]
+    array_of_followed_committees_ids.clear()
+    events = []
+    for each in committees:
+        events.append(EventsSerializer(Events.objects.filter(organisingCommittee=each), many=True).data)
+    print(events)
+    return JsonResponse({"data":events}, status=status.HTTP_200_OK, safe=False)
+

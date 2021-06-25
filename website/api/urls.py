@@ -1,5 +1,5 @@
 from django.urls import path
-from api import views
+from . import views
 from django.conf.urls import include
 
 
@@ -111,7 +111,7 @@ urlpatterns = [
     ),
     path(
         "delete_co_committee_member/<int:pk>/",
-        views.CoCommittee,
+        views.deleteCoCommittee,
         name="delete-co-committee-members",
     ),
     path(
@@ -150,4 +150,14 @@ urlpatterns = [
         views.listNonCoreCommittee,
         name="non_corecom_list",
     ),
+    path("get_liked_events/<int:student_id>/", views.get_liked_events_for_a_user, name="liked_events_by_user"),
+    path("get_followers/<int:committee_id>/", views.get_followers_for_committee, name='follower_count' ),
+    path("committee_logout/", views.committee_logout, name="committee-logout"),
+    path("student_logout/", views.student_logout, name="student-logout"),
+    path("sort_events_by_date/", views.event_sorter, name="sorter"),
+    path("follow/<int:student_id>/<int:committee_id>/", views.follow_committee, name="follow"),
+    path("unfollow/<int:student_id>/<int:committee_id>/", views.unfollow_committee, name="unfollow"),
+    path("sort_by_creation_time/", views.creation_time_sorter, name="creation_time"),
+    path("get_followed_committees/<int:student_id>/", views.committees_followed, name="follwed_committees"),
+    path("get_events_for_followed_committees/<int:student_id>/", views.get_events_for_followed_committees, name="events_of_followed_committees"),
 ]
