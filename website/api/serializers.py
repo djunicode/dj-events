@@ -45,6 +45,8 @@ class CoreCommitteeSerializer(serializers.ModelSerializer):
     committee = serializers.StringRelatedField()
     committee_id = serializers.CharField(source="committee.id")
     student = serializers.CharField(source="student.get_full_name")
+    username = serializers.CharField(source="student.get_username")
+
 
     class Meta:
         model = CoreCommittee
@@ -54,6 +56,7 @@ class CoreCommitteeSerializer(serializers.ModelSerializer):
             "committee_id",
             "committee",
             "positionAssigned",
+            "username",
         ]
 
 
@@ -97,6 +100,7 @@ class CoCommitteeSerializer(serializers.ModelSerializer):
     committee = serializers.StringRelatedField()
     committee_id = serializers.CharField(source="committee.id")
     student = serializers.CharField(source="student.get_full_name")
+    username = serializers.CharField(source="student.get_username")
 
     class Meta:
         model = CoCommittee
@@ -108,6 +112,7 @@ class CoCommitteeSerializer(serializers.ModelSerializer):
             "positionAssigned",
             "referrals",
             "tasks",
+            "username"
         ]
 
 
