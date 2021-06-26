@@ -10,6 +10,14 @@ import {
 import "./Header.css";
 
 const Header = () => {
+  const logoutHandler = () => {
+    localStorage.removeItem("CommitteeDepartment");
+    localStorage.removeItem("Token");
+    localStorage.removeItem("logged");
+    localStorage.removeItem("CommitteeName");
+    localStorage.removeItem("id");
+    window.location.reload();
+  };
   return (
     <header classname="mask">
       <div className="p-5 text-center bg-image">
@@ -45,9 +53,18 @@ const Header = () => {
                     </MDBNavbarLink>
                   </MDBNavbarItem>
                   <MDBNavbarItem>
-                    <MDBNavbarLink className=" spacingnav" href="/login">
-                      <h3>Login</h3>
-                    </MDBNavbarLink>
+                    {localStorage.getItem("logged") ? (
+                      <MDBNavbarLink
+                        className=" spacingnav"
+                        onClick={logoutHandler}
+                      >
+                        <h3>Logout</h3>
+                      </MDBNavbarLink>
+                    ) : (
+                      <MDBNavbarLink className=" spacingnav" href="/login">
+                        <h3>Login</h3>
+                      </MDBNavbarLink>
+                    )}
                   </MDBNavbarItem>
                   {/* <MDBNavbarItem>
                 <MDBNavbarLink href='#'>About</MDBNavbarLink>
