@@ -123,6 +123,7 @@ export default function Login() {
           );
           localStorage.setItem("id", result.id);
           localStorage.setItem("logged", logged);
+          window.location.reload();
         }
       })
       .catch((error) => console.log("error", error));

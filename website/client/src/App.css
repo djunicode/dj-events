@@ -3,6 +3,10 @@
   background: #1c2e4a;
 }
 
+/* input::placeholder{
+  color: red;
+} */
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

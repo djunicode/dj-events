@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   memberlist: {
     color: "white",
     overflowX: "hidden",
-    height: "90vh",
   },
   add: {
     backgroundColour: "#FFFFFF",
@@ -26,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     colour: "#F54B64",
+  },
+  members: {
+    marginTop: "0px",
   },
 }));
 
@@ -56,7 +58,7 @@ const MembersList = () => {
       <LoggedHeader />
       <br />
       <EventsMembersHeader />
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={classes.members}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
           <Grid container spacing={5}>

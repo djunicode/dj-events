@@ -46,7 +46,7 @@ function SignedInRoute({ children, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: "/events",
               state: { from: location },
             }}
           />

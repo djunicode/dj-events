@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     margin: "5%",
     color: "white",
+    border: "1px solid white",
   },
   avatar: {
     marginRight: "2%",
