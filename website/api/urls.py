@@ -1,9 +1,163 @@
 from django.urls import path
-from .views import test1, test2, test3
+from . import views
+from django.conf.urls import include
 
 
 urlpatterns = [
-    path("test1/", test1, name="test1"),
-    path("test2/", test2, name="test2"),
-    path("test3/", test3, name="test3"),
+    # committees
+    path("committees/", views.CommitteeList.as_view(), name="committees_list"),
+    path(
+        "committees/<int:pk>/",
+        views.CommitteeDetail.as_view(),
+        name="committee_detail",
+    ),
+    path(
+        "committeescrud/<int:pk>/",
+        views.CommitteeCrud.as_view(),
+        name="committee_crud",
+    ),
+    # events
+    path("events/", views.EventsList.as_view(), name="events_list"),
+    path("events/new/", views.EventsCreate.as_view(), name="event_create"),
+    path("events/<int:pk>/", views.EventDetail.as_view(), name="event_detail"),
+    path("eventscrud/<int:pk>/", views.EventCrud.as_view(), name="event_crud"),
+    path("eventfinder/<int:pk>/", views.EventFinder, name="event_finder"),
+    path(
+        "committee_detail/<int:pk>/",
+        views.CommitteeExtraDetail,
+        name="committee_detail",
+    ),
+    path(
+        "student_profile/<int:pk>/",
+        views.StudentProfile,
+        name="student_profile",
+    ),
+    path(
+        "referral_table/<int:pk>/", views.ReferralTable, name="referral_table"
+    ),
+    # event like dislike
+    path(
+        "event_like/<int:pk1>/<int:pk2>/",
+        views.event_like,
+        name="event_like",
+    ),
+    path(
+        "event_dislike/<int:pk1>/<int:pk2>/",
+        views.event_dislike,
+        name="event_dislike",
+    ),
+    # tasks
+    path(
+        "coretasklist/<int:pk1>/<int:pk2>/",
+        views.core_task_list,
+        name="core_task_list",
+    ),
+    path(
+        "coretaskcreate/<int:pk1>/<int:pk2>/",
+        views.core_task_create,
+        name="core_task_create",
+    ),
+    path(
+        "core_task_crud/<int:pk1>/<int:pk2>/",
+        views.core_task_crud,
+        name="core_task_crud",
+    ),
+    path(
+        "cotasklist/<int:pk1>/<int:pk2>/",
+        views.co_task_list,
+        name="co_task_list",
+    ),
+    # login
+    path("student_login/", views.student_login, name="student_login"),
+    path("committee_login/", views.committee_login, name="committee_login"),
+    # Registration
+    path(
+        "student_registration/",
+        views.student_registration,
+        name="student_registration",
+    ),
+    # password change
+    path(
+        "change_password/",
+        views.ChangePasswordView.as_view(),
+        name="change_password",
+    ),
+    # Core Committee and Co Committee crud operations
+    # ------------------------------------------------------------------------------------
+    path(
+        "upgrade_to_core/<int:pk>/<str:position>/",
+        views.upgradeToCoreCom,
+        name="uprgade-to-core",
+    ),
+    path(
+        "upgrade_to_co/<int:pk>/<str:position>/",
+        views.upgradeToCoCom,
+        name="uprgade-to-co",
+    ),
+    path(
+        "get_core_committee_members/<int:pk>/",
+        views.listCoreCommittee,
+        name="list-of-core-committee-members",
+    ),
+    path(
+        "get_co_committee_members/<int:pk>/",
+        views.listCoCommittee,
+        name="list-of-co-committee-members",
+    ),
+    path(
+        "delete_core_committee_member/<int:pk>/",
+        views.deleteCoreCommittee,
+        name="delete-core-committee-members",
+    ),
+    path(
+        "delete_co_committee_member/<int:pk>/",
+        views.deleteCoCommittee,
+        name="delete-co-committee-members",
+    ),
+    path(
+        "change_co_committee_members_position/<int:updationId>/",
+        views.changeCoCommitteePosition,
+        name="updation-of-co-committee-members-position",
+    ),
+    path(
+        "change_core_committee_members_position/<int:updationId>/",
+        views.changeCoreCommitteePosition,
+        name="updation-of-core-committee-members-position",
+    ),
+    # ------------------------------------------------------------------------------------
+    path("students/", views.studentList, name="student_list"),
+    # ------------------------------------------------------------------------------------
+    path("student_forgot_password/", views.StudentForgotPassword.as_view()),
+    path(
+        "committee_forgot_password/", views.CommitteeForgotPassword.as_view()
+    ),
+    path("otp_validator/<int:id>/", views.OTPChecker),
+    path("change_forgot_password/<int:id>/", views.ChangePassword),
+    path(
+        "event_like_check/<int:event_id>/<int:student_id>/",
+        views.EventLikeCheck,
+    ),
+    # ---------------------------------------------------------------------------------------
+    path("event_search/", views.event_search, name="event_search"),
+    path("committee_search/", views.committee_search, name="committee_search"),
+    path(
+        "noncocom_list/<int:pk>/",
+        views.listNonCoCommittee,
+        name="non_cocom_list",
+    ),
+    path(
+        "noncorecom_list/<int:pk>/",
+        views.listNonCoreCommittee,
+        name="non_corecom_list",
+    ),
+    path("get_liked_events/<int:student_id>/", views.get_liked_events_for_a_user, name="liked_events_by_user"),
+    path("get_followers/<int:committee_id>/", views.get_followers_for_committee, name='follower_count' ),
+    path("committee_logout/", views.committee_logout, name="committee-logout"),
+    path("student_logout/", views.student_logout, name="student-logout"),
+    path("sort_events_by_date/", views.event_sorter, name="sorter"),
+    path("follow/<int:student_id>/<int:committee_id>/", views.follow_committee, name="follow"),
+    path("unfollow/<int:student_id>/<int:committee_id>/", views.unfollow_committee, name="unfollow"),
+    path("sort_by_creation_time/", views.creation_time_sorter, name="creation_time"),
+    path("get_followed_committees/<int:student_id>/", views.committees_followed, name="follwed_committees"),
+    path("get_events_for_followed_committees/<int:student_id>/", views.get_events_for_followed_committees, name="events_of_followed_committees"),
 ]
