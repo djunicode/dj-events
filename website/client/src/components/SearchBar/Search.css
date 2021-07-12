@@ -1,0 +1,36 @@
+.input-group.md-form.form-sm.form-1 input {
+  width: 550px;
+  height: 70px;
+  margin: 0 auto;
+  background: #4e586e;
+  border: 0.192236px solid #000000;
+  box-sizing: border-box;
+  border-radius: 192.236px;
+  color: #fff;
+  /* z-index: -1; */
+}
+
+.form-control {
+  margin: 0 auto;
+}
+.styling {
+  color: #fff;
+  font-size: 24px;
+  padding-left: 80px;
+}
+
+.relat {
+  position: relative;
+}
+
+.icon_search {
+  color: #fff;
+  position: absolute;
+  top: 52px;
+  left: 35px;
+  color: "#fff";
+  /* z-index: 10; */
+}
+
+.input_search {
+}

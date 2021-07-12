@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 
 @api_view(["GET"])
 def test1(request):
-    test = ["This", "is", "a", "test", 1, 2]
+    test = ["This", "is", "a", "test", 1, 4]
     return Response(status=status.HTTP_200_OK, data={"data": test})
 
 
