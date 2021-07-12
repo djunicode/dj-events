@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   members: {
     marginTop: "0px",
   },
+  border: {
+    textAlign: "center",
+  },
 }));
 
 const MembersList = () => {
@@ -61,52 +64,64 @@ const MembersList = () => {
       <Grid container spacing={3} className={classes.members}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <Grid container spacing={5}>
+          <Grid item lg={12} container spacing={5}>
             {addCore ? (
-              <Grid item xs={6} className={classes.border}>
-                <Button
-                  variant="contained"
-                  className={classes.add}
-                  onClick={back2}
-                >
-                  Back
-                </Button>
+              <Grid item xs={12} md={6}>
+                <div className={classes.border}>
+                  <Button
+                    variant="contained"
+                    className={classes.add}
+                    onClick={back2}
+                  >
+                    Back
+                  </Button>
+                </div>
                 <AddCore />
               </Grid>
             ) : (
-              <Grid item xs={6} className={classes.border}>
-                <Button
-                  variant="contained"
-                  className={classes.add}
-                  onClick={addCoreCommittee}
-                  startIcon={<AddCircleRoundedIcon className={classes.icon} />}
-                >
-                  Add A Core Member
-                </Button>
+              <Grid item xs={12} md={6}>
+                <div className={classes.border}>
+                  <Button
+                    variant="contained"
+                    className={classes.add}
+                    onClick={addCoreCommittee}
+                    startIcon={
+                      <AddCircleRoundedIcon className={classes.icon} />
+                    }
+                  >
+                    Add A Core Member
+                  </Button>
+                </div>
                 <Core />
               </Grid>
             )}
             {addCo ? (
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  className={classes.add}
-                  onClick={back1}
-                >
-                  Back
-                </Button>
+              <Grid item xs={12} md={6}>
+                <div className={classes.border}>
+                  <Button
+                    variant="contained"
+                    className={classes.add}
+                    onClick={back1}
+                  >
+                    Back
+                  </Button>
+                </div>
                 <AddCo />
               </Grid>
             ) : (
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  className={classes.add}
-                  onClick={addCoCommittee}
-                  startIcon={<AddCircleRoundedIcon className={classes.icon} />}
-                >
-                  Add A Co-Committee Member
-                </Button>
+              <Grid item xs={12} md={6}>
+                <div className={classes.border}>
+                  <Button
+                    variant="contained"
+                    className={classes.add}
+                    onClick={addCoCommittee}
+                    startIcon={
+                      <AddCircleRoundedIcon className={classes.icon} />
+                    }
+                  >
+                    Add A Co-Committee Member
+                  </Button>
+                </div>
                 <Co />
               </Grid>
             )}

@@ -1,11 +1,9 @@
 .bg-image {
-  background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.thembegroup.com%2Fwp-content%2Fuploads%2F2016%2F06%2FCorporate-Events.jpg&f=1&nofb=1");
+  background-image: url("https://images.unsplash.com/photo-1549451371-64aa98a6f660?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80");
   height: 600px;
   border-bottom-left-radius: 40%;
   background-size: cover;
-  background-repeat: no-repeat;
   border-bottom-right-radius: 40%;
-  /* background: linear-gradient(101.04deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%), url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.thembegroup.com%2Fwp-content%2Fuploads%2F2016%2F06%2FCorporate-Events.jpg&f=1&nofb=1'); */
 }
 .spacingnav {
   margin-right: 50px;

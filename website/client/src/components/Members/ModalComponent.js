@@ -110,6 +110,7 @@ const ModalComponent = (username) => {
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
+    handleClose();
   };
 
   const addCo = () => {
@@ -126,6 +127,7 @@ const ModalComponent = (username) => {
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
+    handleClose();
   };
 
   return (

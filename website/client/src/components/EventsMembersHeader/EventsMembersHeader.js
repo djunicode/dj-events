@@ -15,7 +15,10 @@ class EventsMembersHeader extends React.Component {
     const classes = useStyles;
     return (
       <div>
-        <div className={classes.root} style={{ marginLeft: "50px auto" }}>
+        <div
+          className={classes.root}
+          style={{ marginLeft: "50px auto", textAlign: "center" }}
+        >
           <Button size="large" href="/events">
             <h5 style={{ color: "white", fontWeight: "bold" }}>Events</h5>
           </Button>

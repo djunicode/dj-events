@@ -95,7 +95,8 @@ class EventCreate extends React.Component {
                 style={{
                   width: "100%",
                   padding: "5px",
-                  backgroundColor: "#000",
+                  backgroundColor: "#E2E2E2",
+                  color: "black",
                 }}
                 type="text"
                 placeholder="Enter the name of the event"
@@ -111,7 +112,8 @@ class EventCreate extends React.Component {
                   width: "100%",
                   padding: "5px",
                   height: "100px",
-                  color: "white",
+                  backgroundColor: "#E2E2E2",
+                  color: "black",
                 }}
                 type="text"
                 placeholder="Enter a short description of the event"
@@ -123,7 +125,11 @@ class EventCreate extends React.Component {
                 onChange={this.onChange}
                 name="eventDate"
                 className="eventinput"
-                style={{ width: "100%", padding: "5px" }}
+                style={{
+                  width: "100%",
+                  backgroundColor: "#E2E2E2",
+                  padding: "5px",
+                }}
                 type="date"
                 placeholder="Choose a Date"
               ></input>
@@ -134,7 +140,12 @@ class EventCreate extends React.Component {
                 onChange={this.onChange}
                 name="eventVenue"
                 className="eventinput"
-                style={{ width: "100%", padding: "5px", fill: "#fff" }}
+                style={{
+                  width: "100%",
+                  padding: "5px",
+                  backgroundColor: "#E2E2E2",
+                  fill: "#fff",
+                }}
                 type="text"
                 placeholder="Enter the venue of the event"
               ></input>
@@ -147,7 +158,11 @@ class EventCreate extends React.Component {
                 onChange={this.onChange}
                 name="registrationLink"
                 className="eventinput"
-                style={{ width: "100%", padding: "5px" }}
+                style={{
+                  width: "100%",
+                  backgroundColor: "#E2E2E2",
+                  padding: "5px",
+                }}
                 type="text"
                 placeholder="Paste the link to register"
               ></input>
@@ -159,7 +174,11 @@ class EventCreate extends React.Component {
                   onChange={this.onChange}
                   name="contactName1"
                   className="eventinput"
-                  style={{ width: "60%", padding: "5px" }}
+                  style={{
+                    width: "60%",
+                    backgroundColor: "#E2E2E2",
+                    padding: "5px",
+                  }}
                   type="text"
                   placeholder="Person's Name"
                 ></input>
@@ -168,7 +187,11 @@ class EventCreate extends React.Component {
                   onChange={this.onChange}
                   name="contactNumber1"
                   className="eventinput"
-                  style={{ width: "100%", padding: "5px" }}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#E2E2E2",
+                    padding: "5px",
+                  }}
                   type="text"
                   placeholder="Contact Number"
                 ></input>
@@ -179,7 +202,11 @@ class EventCreate extends React.Component {
                   onChange={this.onChange}
                   name="contactName2"
                   className="eventinput"
-                  style={{ width: "60%", padding: "5px" }}
+                  style={{
+                    width: "60%",
+                    backgroundColor: "#E2E2E2",
+                    padding: "5px",
+                  }}
                   type="text"
                   placeholder="Person's Name"
                 ></input>
@@ -188,7 +215,11 @@ class EventCreate extends React.Component {
                   onChange={this.onChange}
                   name="contactNumber2"
                   className="eventinput"
-                  style={{ width: "100%", padding: "5px" }}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#E2E2E2",
+                    padding: "5px",
+                  }}
                   type="text"
                   placeholder="Contact Number"
                 ></input>
@@ -203,6 +234,8 @@ class EventCreate extends React.Component {
                   width: "100%",
                   padding: "5px",
                   border: "1px solid black",
+                  backgroundColor: "#E2E2E2",
+                  color: "black",
                 }}
               />
               <br></br>
@@ -211,7 +244,13 @@ class EventCreate extends React.Component {
                 <h3 style={{ textAlign: "left" }}>Add Referral?</h3>
                 <input
                   className="eventinput"
-                  style={{ width: "35px", height: "35px", textAlign: "right" }}
+                  style={{
+                    width: "35px",
+                    backgroundColor: "#E2E2E2",
+                    marginLeft: "2px",
+                    height: "35px",
+                    textAlign: "right",
+                  }}
                   type="checkbox"
                 ></input>
               </div>

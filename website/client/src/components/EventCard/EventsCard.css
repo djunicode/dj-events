@@ -1,25 +1,18 @@
-.bgcolor{
-    background-color: #4E586E;
-    color: #fff;
-}
-/* }
-.sizdef{
-    position: absolute;
-    width: 244px;
-    margin-right: 50px;
-height: 204px;
-} */
-.links{
-    margin-right: 30px !important;
-    color:  #F54B64;
+.bgcolor {
+  background-color: #4e586e;
+  color: #fff;
 }
 
+.links {
+  margin-right: 30px !important;
+  color: #f54b64;
+}
 
 /* Spacing between the cards */
-.myCard{
-    margin: 0 20px;
+.myCard {
+  margin: 0 20px;
 }
 
-.spacinglink{
-    margin-right: 40px;
+.spacinglink {
+  margin-right: 60px;
 }

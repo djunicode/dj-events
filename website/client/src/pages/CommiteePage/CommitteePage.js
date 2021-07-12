@@ -87,7 +87,6 @@ const CommitteePage = () => {
         </div>
       </div>
       <h3 className="inner_title2">Faculty Members</h3>
-      <p className="year">2020-2021</p>
       <div>
         <div className="d-flex align-items-center mainCard">
           <Grid
@@ -109,7 +108,6 @@ const CommitteePage = () => {
         </div>
       </div>
       <h3 className="inner_title2">Core Members</h3>
-      <p className="year">2020-2021</p>
       <div>
         <div className="d-flex align-items-center mainCard">
           <Grid

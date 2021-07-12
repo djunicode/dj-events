@@ -23,14 +23,18 @@ const CustomCard = ({ id, name, summary, committeeName }) => {
           <MDBCardText>{summary}</MDBCardText>
 
           <MDBCardLink
+            style={{ color: "#F54B64", marginLeft: "0px" }}
+            href={"/event/" + id}
+          >
+            KNOW MORE
+          </MDBCardLink>
+
+          <MDBCardLink
             classname="spacinglink"
             style={{ color: "#F54B64" }}
             href="#"
           >
             {committeeName}
-          </MDBCardLink>
-          <MDBCardLink style={{ color: "#F54B64" }} href={"/event/" + id}>
-            KNOW MORE
           </MDBCardLink>
         </MDBCardBody>
       </MDBCard>

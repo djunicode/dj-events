@@ -106,13 +106,13 @@ const DetailEvent = () => {
   return (
     <div style={{ overflowX: "hidden" }}>
       <Navbar />
-      <div className="header">
+      <div className="header" style={{ marginLeft: "670px" }}>
         <Button href="/">
           <ArrowBackIosIcon className="icon" />
         </Button>
         <h1 className="title_name">{events.eventName}</h1>
       </div>
-      <MDBRow className="mb-4 imageholder">
+      <MDBRow className="mb-4 imageholder" style={{ marginLeft: "470px" }}>
         <MDBCol md="12">
           <img
             src="https://mdbootstrap.com/img/Others/documentation/1.jpg"
@@ -136,40 +136,40 @@ const DetailEvent = () => {
           ))}
         </GridList>
       </div>
-      <h3 className="inner_title2">Interested? Register Now!</h3>
-      <p>
-        <a className="link" href={events.registrationLink}>
-          {events.registrationLink}
-        </a>
-      </p>
-      <h3 className="inner_title2" style={{ marginLeft: "-635px" }}>
-        Facing a problem? Get in touch
-      </h3>
-      <div className="contact_details">
-        <h5 className="contact" style={{ marginRight: "50px" }}>
-          {" "}
-          <PersonIcon className="contacticon" /> {events.contactName1}
-        </h5>
-        <h5 className="contact2">
-          {" "}
-          <CallIcon className="contacticon" /> {events.contactNumber1}
-        </h5>
-      </div>
-      {events.contactName2 ? (
+      <div style={{ marginLeft: "200px", marginTop: "50px" }}>
+        <h3 style={{ color: "#F54B64" }}>Interested? Register Now!</h3>
+        <p>
+          <a className="link" href={events.registrationLink}>
+            {events.registrationLink}
+          </a>
+        </p>
+        <h3 style={{ color: "#F54B64" }}>Facing a problem? Get in touch</h3>
         <div className="contact_details">
-          <h5 className="contact">
+          <h5 className="contact" style={{ marginRight: "50px" }}>
             {" "}
-            <PersonIcon className="contacticon" /> {events.contactName2}
+            <PersonIcon className="contacticon" /> {events.contactName1}
           </h5>
           <h5 className="contact2">
             {" "}
-            <CallIcon className="contacticon" />
-            {events.contactNumber1}
+            <CallIcon className="contacticon" /> {events.contactNumber1}
           </h5>
         </div>
-      ) : (
-        ""
-      )}
+        {events.contactName2 ? (
+          <div className="contact_details">
+            <h5 className="contact" style={{ marginRight: "110px" }}>
+              {" "}
+              <PersonIcon className="contacticon" /> {events.contactName2}
+            </h5>
+            <h5 className="contact2">
+              {" "}
+              <CallIcon className="contacticon" />
+              {events.contactNumber2}
+            </h5>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       <br />
       <Footer />
     </div>

@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   left: {
     marginLeft: "-20%",
     marginTop: "20px",
+    textAlign: "center",
   },
 }));
 
@@ -39,7 +40,9 @@ export default function LoggedHeader() {
       </div>
       <div className={classes.right}>
         <div style={{ fontSize: "34px" }}>{CommitteeName}</div>
-        <div style={{ fontSize: "25px" }}>{CommitteeDepartment}</div>
+        <div style={{ fontSize: "25px", display: "left" }}>
+          {CommitteeDepartment}
+        </div>
       </div>
     </div>
   );
